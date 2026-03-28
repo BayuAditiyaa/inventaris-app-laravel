@@ -22,19 +22,19 @@ public function view(User $user, Product $product): bool
 // only admin can create
 public function create(User $user): bool
 {
-    return $user->role == 'admin';
+    return $user->role === 'admin';
 }
 
 //only admin can update
 public function update(User $user, Product $product): bool
 {
-    return $user->role == 'admin';
+    return $user->role === 'admin';
 }
 
 //only admin can delete
 public function delete(User $user, Product $product): bool
 {
-    return $user->role == 'admin';
+    return $user->role === 'admin';
 }
 
 
