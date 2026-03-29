@@ -10,11 +10,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-    public function __construct()
-    {
-        // Authorize with policy
-        $this->authorizeResource(Product::class);
-    }
+    // Remove the __construct method entirely, or use this:
 
     // List products (paginated)
     public function index()
@@ -37,12 +33,18 @@ class ProductController extends Controller
     // Create form
     public function create()
     {
+        // Anyone logged in can view, but we check before allowing actual creation
         return Inertia::render('Products/Create');
     }
 
     // Store new product
     public function store(StoreProductRequest $request)
     {
+        // Check authorization: only admin can create
+        if (auth()->user()->role !== 'admin') {
+            abort(403, 'Unauthorized action.');
+        }
+
         $imagePath = null;
 
         if ($request->hasFile('image')) {
@@ -65,6 +67,11 @@ class ProductController extends Controller
     // Edit form
     public function edit(Product $product)
     {
+        // Check authorization
+        if (auth()->user()->role !== 'admin') {
+            abort(403, 'Unauthorized action.');
+        }
+
         return Inertia::render('Products/Edit', [
             'product' => $product,
         ]);
@@ -73,10 +80,14 @@ class ProductController extends Controller
     // Update product
     public function update(UpdateProductRequest $request, Product $product)
     {
+        // Check authorization
+        if (auth()->user()->role !== 'admin') {
+            abort(403, 'Unauthorized action.');
+        }
+
         $imagePath = $product->image_path;
 
         if ($request->hasFile('image')) {
-            // Delete old image
             if ($imagePath) {
                 Storage::disk('public')->delete($imagePath);
             }
@@ -99,6 +110,11 @@ class ProductController extends Controller
     // Delete product
     public function destroy(Product $product)
     {
+        // Check authorization
+        if (auth()->user()->role !== 'admin') {
+            abort(403, 'Unauthorized action.');
+        }
+
         if ($product->image_path) {
             Storage::disk('public')->delete($product->image_path);
         }

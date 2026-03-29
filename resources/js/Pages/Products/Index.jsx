@@ -110,24 +110,32 @@ export default function ProductIndex({ products, search }) {
                                 </table>
                             </div>
 
-                            {/* Pagination */}
+{/* Pagination */}
                             <div className="mt-6 flex justify-between items-center">
                                 <div className="text-sm text-gray-600">
-                                    Showing {products.meta.from} to {products.meta.to} of {products.meta.total}
+                                    {/* Added || 0 fallbacks in case the table is completely empty */}
+                                    Showing {products.from || 0} to {products.to || 0} of {products.total}
                                 </div>
-                                <div className="space-x-1">
+                                <div className="space-x-1 flex">
                                     {products.links.map((link, idx) => (
-                                        <Link
-                                            key={idx}
-                                            href={link.url}
-                                            className={`px-2 py-1 text-xs ${link.active
-                                                    ? 'bg-blue-600 text-white'
-                                                    : link.url
-                                                        ? 'bg-gray-200 hover:bg-gray-300'
-                                                        : 'bg-gray-100 text-gray-400'
+                                        link.url ? (
+                                            <Link
+                                                key={idx}
+                                                href={link.url}
+                                                className={`px-3 py-1 text-xs border rounded ${
+                                                    link.active
+                                                        ? 'bg-blue-600 text-white border-blue-600'
+                                                        : 'bg-white hover:bg-gray-100 text-gray-700'
                                                 }`}
-                                            dangerouslySetInnerHTML={{ __html: link.label }}
-                                        />
+                                                dangerouslySetInnerHTML={{ __html: link.label }}
+                                            />
+                                        ) : (
+                                            <span
+                                                key={idx}
+                                                className="px-3 py-1 text-xs border rounded bg-gray-50 text-gray-400 cursor-not-allowed"
+                                                dangerouslySetInnerHTML={{ __html: link.label }}
+                                            />
+                                        )
                                     ))}
                                 </div>
                             </div>

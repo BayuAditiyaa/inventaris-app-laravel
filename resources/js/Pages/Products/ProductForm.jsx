@@ -33,8 +33,8 @@ export default function ProductForm({ product }) {
         const formData = new FormData();
         formData.append('name', data.name);
         formData.append('sku', data.sku);
-        formData.append('cost', Math.round(parseFloat(data.cost) * 100).toString());
-        formData.append('price', Math.round(parseFloat(data.price) * 100).toString());
+formData.append('cost', parseInt(data.cost));
+formData.append('price', parseInt(data.price));
         formData.append('stock_alert', data.stock_alert);
         
         if (data.image) {
@@ -83,7 +83,7 @@ export default function ProductForm({ product }) {
                 {/* Cost & Price (grid) */}
                 <div className="grid grid-cols-2 gap-4">
                     <div>
-                        <label className="block text-sm font-semibold mb-2">Cost ($) *</label>
+                        <label className="block text-sm font-semibold mb-2">Cost (Rp.) *</label>
                         <input
                             type="number"
                             step="0.01"
@@ -97,7 +97,7 @@ export default function ProductForm({ product }) {
                     </div>
 
                     <div>
-                        <label className="block text-sm font-semibold mb-2">Price ($) *</label>
+                        <label className="block text-sm font-semibold mb-2">Price (Rp.) *</label>
                         <input
                             type="number"
                             step="0.01"
