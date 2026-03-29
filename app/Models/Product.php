@@ -21,6 +21,17 @@ class Product extends Model
         'image_path',
     ];
 
+        // Format price to IDR (with commas and Rp)
+    public function getFormattedPriceAttribute()
+    {
+        return 'Rp ' . number_format($this->price, 0, ',', '.');
+    }
+
+    public function getFormattedCostAttribute()
+    {
+        return 'Rp ' . number_format($this->cost, 0, ',', '.');
+    }
+
 
     //check if low stock
     public function isLowStock(): bool

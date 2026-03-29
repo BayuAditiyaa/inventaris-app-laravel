@@ -71,15 +71,14 @@ export default function ProductIndex({ products, search }) {
                                                 <tr key={product.id} className="border-b hover:bg-gray-50">
                                                     <td className="px-4 py-2 font-mono text-xs">{product.sku}</td>
                                                     <td className="px-4 py-2">{product.name}</td>
-                                                    <td className="px-4 py-2">${(product.cost / 100).toFixed(2)}</td>
-                                                    <td className="px-4 py-2">${(product.price / 100).toFixed(2)}</td>
+                                                    <td className="px-4 py-2">Rp {product.cost.toLocaleString('id-ID')}</td>
+                                                    <td className="px-4 py-2">Rp {product.price.toLocaleString('id-ID')}</td>
                                                     <td className="px-4 py-2">
                                                         <span
-                                                            className={`px-2 py-1 rounded text-xs font-semibold ${
-                                                                product.stock <= product.stock_alert
+                                                            className={`px-2 py-1 rounded text-xs font-semibold ${product.stock <= product.stock_alert
                                                                     ? 'bg-red-100 text-red-800'
                                                                     : 'bg-green-100 text-green-800'
-                                                            }`}
+                                                                }`}
                                                         >
                                                             {product.stock}
                                                         </span>
@@ -121,13 +120,12 @@ export default function ProductIndex({ products, search }) {
                                         <Link
                                             key={idx}
                                             href={link.url}
-                                            className={`px-2 py-1 text-xs ${
-                                                link.active
+                                            className={`px-2 py-1 text-xs ${link.active
                                                     ? 'bg-blue-600 text-white'
                                                     : link.url
-                                                    ? 'bg-gray-200 hover:bg-gray-300'
-                                                    : 'bg-gray-100 text-gray-400'
-                                            }`}
+                                                        ? 'bg-gray-200 hover:bg-gray-300'
+                                                        : 'bg-gray-100 text-gray-400'
+                                                }`}
                                             dangerouslySetInnerHTML={{ __html: link.label }}
                                         />
                                     ))}

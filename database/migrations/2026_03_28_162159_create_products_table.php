@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('sku')->unique();
-            $table->integer('cost');
-            $table->integer('price');
+            $table->bigInteger('cost');
+            $table->bigInteger('price');
             $table->integer('stock')->default(0);
             $table->integer('stock_alert')->default(5);
             $table->string('image_path')->nullable();

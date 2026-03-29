@@ -5,8 +5,8 @@ export default function ProductForm({ product }) {
     const { data, setData, post, put, processing, errors } = useForm({
         name: product?.name || '',
         sku: product?.sku || '',
-        cost: product?.cost ? (product.cost / 100).toString() : '',
-        price: product?.price ? (product.price / 100).toString() : '',
+        cost: product?.cost ? product.cost.toString() : '',
+        price: product?.price ? product.price.toString() : '',
         stock_alert: product?.stock_alert || '5',
         image: null,
     });
