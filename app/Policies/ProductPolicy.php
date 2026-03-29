@@ -8,12 +8,13 @@ use App\Models\User;
 class ProductPolicy
 {
 
-//anyone authenticated can view
+//anyone authenticated can view all products
 public function viewAny(User $user): bool
 {
     return true;
 }
 
+//anyone authenticated can view detail product
 public function view(User $user, Product $product): bool
 {
     return true;
