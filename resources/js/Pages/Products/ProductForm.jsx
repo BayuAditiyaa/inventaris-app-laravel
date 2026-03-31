@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { router, useForm } from '@inertiajs/react';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 
 export default function ProductForm({ product }) {
-    const { data, setData, post, put, processing, errors } = useForm({
+    const { data, setData, post, processing, errors } = useForm({
         name: product?.name || '',
         sku: product?.sku || '',
         cost: product?.cost ? product.cost.toString() : '',
@@ -25,6 +26,11 @@ export default function ProductForm({ product }) {
             };
             reader.readAsDataURL(file);
         }
+    };
+
+    const clearImage = () => {
+        setData('image', null);
+        setImagePreview(null);
     };
 
     const handleSubmit = (e) => {
@@ -51,111 +57,177 @@ export default function ProductForm({ product }) {
 
     return (
         <form onSubmit={handleSubmit} encType="multipart/form-data">
-            <div className="space-y-6">
-                {/* Name */}
-                <div>
-                    <label className="block text-sm font-semibold mb-2">Product Name *</label>
-                    <input
-                        type="text"
-                        value={data.name}
-                        onChange={(e) => setData('name', e.target.value)}
-                        className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 ${errors.name ? 'border-red-500 focus:ring-red-500' : 'focus:ring-blue-500'
-                            }`}
-                    />
-                    {errors.name && <p className="text-red-600 text-sm mt-1">{errors.name}</p>}
-                </div>
-
-                {/* SKU */}
-                <div>
-                    <label className="block text-sm font-semibold mb-2">SKU *</label>
-                    <input
-                        type="text"
-                        value={data.sku}
-                        onChange={(e) => setData('sku', e.target.value)}
-                        className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 ${errors.sku ? 'border-red-500 focus:ring-red-500' : 'focus:ring-blue-500'
-                            }`}
-                    />
-                    {errors.sku && <p className="text-red-600 text-sm mt-1">{errors.sku}</p>}
-                </div>
-
-                {/* Cost & Price (grid) */}
-                <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-8">
+                {/* Left side: Form */}
+                <div className="col-span-2 space-y-6">
+                    {/* Name */}
                     <div>
-                        <label className="block text-sm font-semibold mb-2">Cost (Rp.) *</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            Product Name *
+                        </label>
                         <input
-                            type="number"
-                            step="0.01"
-                            value={data.cost}
-                            onChange={(e) => setData('cost', e.target.value)}
-                            className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 ${errors.cost ? 'border-red-500 focus:ring-red-500' : 'focus:ring-blue-500'
-                                }`}
+                            type="text"
+                            value={data.name}
+                            onChange={(e) => setData('name', e.target.value)}
+                            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                                errors.name
+                                    ? 'border-red-500 focus:ring-red-500'
+                                    : 'border-gray-300 focus:ring-blue-500'
+                            }`}
                         />
-                        {errors.cost && <p className="text-red-600 text-sm mt-1">{errors.cost}</p>}
+                        {errors.name && (
+                            <p className="text-red-600 text-sm mt-1">{errors.name}</p>
+                        )}
                     </div>
 
+                    {/* SKU */}
                     <div>
-                        <label className="block text-sm font-semibold mb-2">Price (Rp.) *</label>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            SKU *
+                        </label>
                         <input
-                            type="number"
-                            step="0.01"
-                            value={data.price}
-                            onChange={(e) => setData('price', e.target.value)}
-                            className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 ${errors.price ? 'border-red-500 focus:ring-red-500' : 'focus:ring-blue-500'
-                                }`}
-                        />
-                        {errors.price && <p className="text-red-600 text-sm mt-1">{errors.price}</p>}
-                    </div>
-                </div>
-
-                {/* Stock Alert */}
-                <div>
-                    <label className="block text-sm font-semibold mb-2">Stock Alert Level *</label>
-                    <input
-                        type="number"
-                        value={data.stock_alert}
-                        onChange={(e) => setData('stock_alert', e.target.value)}
-                        className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 ${errors.stock_alert ? 'border-red-500 focus:ring-red-500' : 'focus:ring-blue-500'
+                            type="text"
+                            value={data.sku}
+                            onChange={(e) => setData('sku', e.target.value)}
+                            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                                errors.sku
+                                    ? 'border-red-500 focus:ring-red-500'
+                                    : 'border-gray-300 focus:ring-blue-500'
                             }`}
-                    />
-                    {errors.stock_alert && <p className="text-red-600 text-sm mt-1">{errors.stock_alert}</p>}
-                </div>
+                        />
+                        {errors.sku && (
+                            <p className="text-red-600 text-sm mt-1">{errors.sku}</p>
+                        )}
+                    </div>
 
-                {/* Image Upload */}
-                <div>
-                    <label className="block text-sm font-semibold mb-2">Product Image</label>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageChange}
-                        className="w-full px-4 py-2 border rounded"
-                    />
-                    {errors.image && <p className="text-red-600 text-sm mt-1">{errors.image}</p>}
-
-                    {imagePreview && (
-                        <div className="mt-4">
-                            <img src={imagePreview} alt="Preview" className="w-40 h-40 object-cover rounded" />
+                    {/* Cost & Price */}
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                Cost (Rp) *
+                            </label>
+                            <input
+                                type="number"
+                                value={data.cost}
+                                onChange={(e) => setData('cost', e.target.value)}
+                                placeholder="e.g., 50000"
+                                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                                    errors.cost
+                                        ? 'border-red-500 focus:ring-red-500'
+                                        : 'border-gray-300 focus:ring-blue-500'
+                                }`}
+                            />
+                            {errors.cost && (
+                                <p className="text-red-600 text-sm mt-1">{errors.cost}</p>
+                            )}
                         </div>
-                    )}
+
+                        <div>
+                            <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                Price (Rp) *
+                            </label>
+                            <input
+                                type="number"
+                                value={data.price}
+                                onChange={(e) => setData('price', e.target.value)}
+                                placeholder="e.g., 75000"
+                                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                                    errors.price
+                                        ? 'border-red-500 focus:ring-red-500'
+                                        : 'border-gray-300 focus:ring-blue-500'
+                                }`}
+                            />
+                            {errors.price && (
+                                <p className="text-red-600 text-sm mt-1">{errors.price}</p>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Stock Alert */}
+                    <div>
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                            Stock Alert Level *
+                        </label>
+                        <input
+                            type="number"
+                            value={data.stock_alert}
+                            onChange={(e) => setData('stock_alert', e.target.value)}
+                            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+                                errors.stock_alert
+                                    ? 'border-red-500 focus:ring-red-500'
+                                    : 'border-gray-300 focus:ring-blue-500'
+                            }`}
+                        />
+                        {errors.stock_alert && (
+                            <p className="text-red-600 text-sm mt-1">{errors.stock_alert}</p>
+                        )}
+                    </div>
                 </div>
 
-                {/* Submit */}
-                <div className="flex gap-4 pt-6">
-                    <button
-                        type="submit"
-                        disabled={processing}
-                        className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
-                    >
-                        {processing ? 'Saving...' : product ? 'Update' : 'Create'}
-                    </button>
+                {/* Right side: Image Upload & Preview */}
+                <div className="col-span-1">
+                    <div className="bg-gray-50 rounded-lg p-6 border-2 border-dashed border-gray-300">
+                        <label className="block text-sm font-semibold text-gray-700 mb-4">
+                            Product Image
+                        </label>
 
-                    <button
-                        type="button"
-                        onClick={() => window.history.back()}
-                        className="px-6 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
-                    >
-                        Cancel
-                    </button>
+                        {/* Image Preview */}
+                        {imagePreview ? (
+                            <div className="relative mb-4">
+                                <img
+                                    src={imagePreview}
+                                    alt="Preview"
+                                    className="w-full h-48 object-cover rounded-lg"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={clearImage}
+                                    className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
+                                >
+                                    <XMarkIcon className="w-4 h-4" />
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="w-full h-48 bg-white rounded-lg border-2 border-gray-300 flex items-center justify-center mb-4">
+                                <p className="text-gray-500 text-sm">No image yet</p>
+                            </div>
+                        )}
+
+                        {/* File Input */}
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageChange}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm cursor-pointer"
+                        />
+                        <p className="text-xs text-gray-500 mt-2">
+                            JPG, PNG, GIF (max 2MB)
+                        </p>
+
+                        {errors.image && (
+                            <p className="text-red-600 text-sm mt-2">{errors.image}</p>
+                        )}
+                    </div>
                 </div>
+            </div>
+
+            {/* Submit Buttons */}
+            <div className="mt-8 flex gap-4">
+                <button
+                    type="submit"
+                    disabled={processing}
+                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors font-medium"
+                >
+                    {processing ? 'Saving...' : product ? 'Update Product' : 'Create Product'}
+                </button>
+
+                <button
+                    type="button"
+                    onClick={() => window.history.back()}
+                    className="px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium"
+                >
+                    Cancel
+                </button>
             </div>
         </form>
     );
