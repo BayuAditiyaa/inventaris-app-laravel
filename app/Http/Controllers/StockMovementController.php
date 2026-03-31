@@ -63,7 +63,7 @@ class StockMovementController extends Controller
     // Store movement
     public function store(StoreStockMovementRequest $request)
     {
-         Gate::authorize('create', StockMovement::class);
+        Gate::authorize('create', StockMovement::class);
 
         try {
             $product = Product::findOrFail($request->product_id);

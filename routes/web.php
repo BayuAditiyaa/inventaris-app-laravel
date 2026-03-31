@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StockMovementController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -27,5 +28,13 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('products', ProductController::class);
+
+     // Stock Movements
+    Route::get('/stock-movements', [StockMovementController::class, 'index'])->name('stock-movements.index');
+    Route::get('/stock-movements/create', [StockMovementController::class, 'create'])->name('stock-movements.create');
+    Route::post('/stock-movements', [StockMovementController::class, 'store'])->name('stock-movements.store');
 });
+
+ 
+
 require __DIR__.'/auth.php';

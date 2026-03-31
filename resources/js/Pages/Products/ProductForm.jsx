@@ -33,10 +33,10 @@ export default function ProductForm({ product }) {
         const formData = new FormData();
         formData.append('name', data.name);
         formData.append('sku', data.sku);
-formData.append('cost', parseInt(data.cost));
-formData.append('price', parseInt(data.price));
+        formData.append('cost', parseInt(data.cost));
+        formData.append('price', parseInt(data.price));
         formData.append('stock_alert', data.stock_alert);
-        
+
         if (data.image) {
             formData.append('image', data.image);
         }
@@ -59,9 +59,8 @@ formData.append('price', parseInt(data.price));
                         type="text"
                         value={data.name}
                         onChange={(e) => setData('name', e.target.value)}
-                        className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 ${
-                            errors.name ? 'border-red-500 focus:ring-red-500' : 'focus:ring-blue-500'
-                        }`}
+                        className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 ${errors.name ? 'border-red-500 focus:ring-red-500' : 'focus:ring-blue-500'
+                            }`}
                     />
                     {errors.name && <p className="text-red-600 text-sm mt-1">{errors.name}</p>}
                 </div>
@@ -73,9 +72,8 @@ formData.append('price', parseInt(data.price));
                         type="text"
                         value={data.sku}
                         onChange={(e) => setData('sku', e.target.value)}
-                        className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 ${
-                            errors.sku ? 'border-red-500 focus:ring-red-500' : 'focus:ring-blue-500'
-                        }`}
+                        className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 ${errors.sku ? 'border-red-500 focus:ring-red-500' : 'focus:ring-blue-500'
+                            }`}
                     />
                     {errors.sku && <p className="text-red-600 text-sm mt-1">{errors.sku}</p>}
                 </div>
@@ -89,9 +87,8 @@ formData.append('price', parseInt(data.price));
                             step="0.01"
                             value={data.cost}
                             onChange={(e) => setData('cost', e.target.value)}
-                            className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 ${
-                                errors.cost ? 'border-red-500 focus:ring-red-500' : 'focus:ring-blue-500'
-                            }`}
+                            className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 ${errors.cost ? 'border-red-500 focus:ring-red-500' : 'focus:ring-blue-500'
+                                }`}
                         />
                         {errors.cost && <p className="text-red-600 text-sm mt-1">{errors.cost}</p>}
                     </div>
@@ -103,9 +100,8 @@ formData.append('price', parseInt(data.price));
                             step="0.01"
                             value={data.price}
                             onChange={(e) => setData('price', e.target.value)}
-                            className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 ${
-                                errors.price ? 'border-red-500 focus:ring-red-500' : 'focus:ring-blue-500'
-                            }`}
+                            className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 ${errors.price ? 'border-red-500 focus:ring-red-500' : 'focus:ring-blue-500'
+                                }`}
                         />
                         {errors.price && <p className="text-red-600 text-sm mt-1">{errors.price}</p>}
                     </div>
@@ -118,9 +114,8 @@ formData.append('price', parseInt(data.price));
                         type="number"
                         value={data.stock_alert}
                         onChange={(e) => setData('stock_alert', e.target.value)}
-                        className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 ${
-                            errors.stock_alert ? 'border-red-500 focus:ring-red-500' : 'focus:ring-blue-500'
-                        }`}
+                        className={`w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 ${errors.stock_alert ? 'border-red-500 focus:ring-red-500' : 'focus:ring-blue-500'
+                            }`}
                     />
                     {errors.stock_alert && <p className="text-red-600 text-sm mt-1">{errors.stock_alert}</p>}
                 </div>

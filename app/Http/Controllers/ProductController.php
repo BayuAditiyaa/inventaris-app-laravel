@@ -35,7 +35,7 @@ class ProductController extends Controller
     // Create form
     public function create()
     {
-       Gate::authorize('create', Product::class);
+        Gate::authorize('create', Product::class);
 
         return Inertia::render('Products/Create');
     }
@@ -43,7 +43,7 @@ class ProductController extends Controller
     // Store new product
     public function store(StoreProductRequest $request)
     {
-     Gate::authorize('create', Product::class);
+        Gate::authorize('create', Product::class);
 
         $imagePath = null;
 
@@ -67,7 +67,7 @@ class ProductController extends Controller
     // Edit form
     public function edit(Product $product)
     {
-   Gate::authorize('update', $product);
+        Gate::authorize('update', $product);
         return Inertia::render('Products/Edit', [
             'product' => $product,
         ]);
@@ -76,7 +76,7 @@ class ProductController extends Controller
     // Update product
     public function update(UpdateProductRequest $request, Product $product)
     {
-       Gate::authorize('update', $product);
+        Gate::authorize('update', $product);
 
         $imagePath = $product->image_path;
 
@@ -103,7 +103,7 @@ class ProductController extends Controller
     // Delete product
     public function destroy(Product $product)
     {
-       Gate::authorize('delete', $product);
+        Gate::authorize('delete', $product);
 
         if ($product->image_path) {
             Storage::disk('public')->delete($product->image_path);
