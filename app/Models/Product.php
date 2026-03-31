@@ -21,6 +21,12 @@ class Product extends Model
         'image_path',
     ];
 
+    // Relationships
+    public function stockMovements(): HasMany
+    {
+        return $this->hasMany(StockMovement::class);
+    }
+
         // Format price to IDR (with commas and Rp)
     public function getFormattedPriceAttribute()
     {
