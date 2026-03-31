@@ -164,7 +164,7 @@ export default function StockMovementIndex({ movements, products, filters }) {
                                                         {getQtyDisplay(movement)}
                                                     </td>
                                                     <td className="px-4 py-2 text-xs text-gray-600">{movement.note}</td>
-                                                    <td className="px-4 py-2 text-xs">{movement.created_by_user?.name}</td>
+                                                    <td className="px-4 py-2 text-xs">{movement.created_by?.name}</td>
                                                 </tr>
                                             ))
                                         ) : (

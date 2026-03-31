@@ -5,13 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\StockMovement;
 use App\Http\Requests\StoreStockMovementRequest;
-use App\Services\InventoryService;
+use App\Services\InventoryServices;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Gate;
 
 class StockMovementController extends Controller
 {
+    protected InventoryServices $inventoryService;
 
+    // BRING THIS CONSTRUCTOR BACK!
+    public function __construct(InventoryServices $inventoryService)
+    {
+        $this->inventoryService = $inventoryService;
+    }
     // List stock movements
     public function index()
     {

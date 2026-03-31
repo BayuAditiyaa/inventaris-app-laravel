@@ -6,7 +6,7 @@ use App\Models\Product;
 use App\Models\StockMovement;
 use Illuminate\Support\Facades\DB;
 
-class InventoryService
+class InventoryServices
 {
     /**
      * Increase stock (e.g., received goods)
