@@ -7,14 +7,16 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Gate;
 
 class ProductController extends Controller
 {
-    // Remove the __construct method entirely, or use this:
+
 
     // List products (paginated)
     public function index()
     {
+        Gate::authorize('viewAny', Product::class);
         $products = Product::query()
             ->when(request('search'), function ($query) {
                 $search = request('search');
@@ -33,17 +35,15 @@ class ProductController extends Controller
     // Create form
     public function create()
     {
-        // Anyone logged in can view, but we check before allowing actual creation
+       Gate::authorize('create', Product::class);
+
         return Inertia::render('Products/Create');
     }
 
     // Store new product
     public function store(StoreProductRequest $request)
     {
-        // Check authorization: only admin can create
-        if (auth()->user()->role !== 'admin') {
-            abort(403, 'Unauthorized action.');
-        }
+     Gate::authorize('create', Product::class);
 
         $imagePath = null;
 
@@ -54,8 +54,8 @@ class ProductController extends Controller
         Product::create([
             'name' => $request->name,
             'sku' => $request->sku,
-            'cost' => $request->cost,
-            'price' => $request->price,
+            'cost' => (int)$request->cost,
+            'price' => (int)$request->price,
             'stock_alert' => $request->stock_alert,
             'image_path' => $imagePath,
         ]);
@@ -67,11 +67,7 @@ class ProductController extends Controller
     // Edit form
     public function edit(Product $product)
     {
-        // Check authorization
-        if (auth()->user()->role !== 'admin') {
-            abort(403, 'Unauthorized action.');
-        }
-
+   Gate::authorize('update', $product);
         return Inertia::render('Products/Edit', [
             'product' => $product,
         ]);
@@ -80,10 +76,7 @@ class ProductController extends Controller
     // Update product
     public function update(UpdateProductRequest $request, Product $product)
     {
-        // Check authorization
-        if (auth()->user()->role !== 'admin') {
-            abort(403, 'Unauthorized action.');
-        }
+       Gate::authorize('update', $product);
 
         $imagePath = $product->image_path;
 
@@ -97,8 +90,8 @@ class ProductController extends Controller
         $product->update([
             'name' => $request->name,
             'sku' => $request->sku,
-            'cost' => $request->cost,
-            'price' => $request->price,
+            'cost' => (int)$request->cost,
+            'price' => (int)$request->price,
             'stock_alert' => $request->stock_alert,
             'image_path' => $imagePath,
         ]);
@@ -110,10 +103,7 @@ class ProductController extends Controller
     // Delete product
     public function destroy(Product $product)
     {
-        // Check authorization
-        if (auth()->user()->role !== 'admin') {
-            abort(403, 'Unauthorized action.');
-        }
+       Gate::authorize('delete', $product);
 
         if ($product->image_path) {
             Storage::disk('public')->delete($product->image_path);
