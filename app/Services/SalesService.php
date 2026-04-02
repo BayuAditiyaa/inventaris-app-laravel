@@ -57,13 +57,13 @@ class SalesService
     //         // Create sale
     //         $total = $subtotal - $discount;
     //         $sale = Sale::create([
-    //             'invoice_no' => $this->generateInvoiceNumber(),
-    //             'customer_id' => $customerId,
-    //             'user_id' => $userId ?? auth()->id(),
-    //             'sold_at' => now(),
-    //             'subtotal' => $subtotal,
-    //             'discount' => $discount,
-    //             'total' => $total,
+    // 'invoice_no' => $this->generateInvoiceNumber(),
+    // 'customer_id' => $customerId,
+    // 'user_id' => $userId ?? auth()->id(),
+    // 'sold_at' => now(),
+    // 'subtotal' => $subtotal,
+    // 'discount' => $discount,
+    // 'total' => $total,
     //         ]);
 
     //         // Create sale items & decrease stock
@@ -99,7 +99,7 @@ class SalesService
             // LOOP 1: Validate AND Calculate
             foreach ($items as $item) {
                 $product = Product::findOrFail($item['product_id']);
-                
+
                 if ($product->stock < $item['qty']) {
                     throw new \Exception("Insufficient stock for {$product->name}. Available: {$product->stock}");
                 }
@@ -120,7 +120,15 @@ class SalesService
 
             // Create the parent Sale receipt
             $total = $subtotal - $discount;
-            $sale = Sale::create([ /* ... your current code ... */ ]);
+            $sale = Sale::create([
+                'invoice_no' => $this->generateInvoiceNumber(),
+                'customer_id' => $customerId,
+                'user_id' => $userId ?? auth()->id(),
+                'sold_at' => now(),
+                'subtotal' => $subtotal,
+                'discount' => $discount,
+                'total' => $total,
+            ]);
 
             // LOOP 2: Create items and deduct stock using our cached products
             foreach ($saleItems as $item) {

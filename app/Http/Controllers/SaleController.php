@@ -78,7 +78,7 @@ class SaleController extends Controller
     public function index()
     {
         $sales = Sale::query()
-            ->with(['customer', 'user'])
+            ->with(['customer', 'user', 'items'])
             ->when(request('date_from'), function ($query) {
                 $query->whereDate('sold_at', '>=', request('date_from'));
             })

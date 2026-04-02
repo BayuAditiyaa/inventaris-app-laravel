@@ -15,6 +15,7 @@ class Sale extends Model
     protected $casts = [
         'sold_at' => 'datetime',
     ];
+    protected $appends = ['profit'];
 
     // Relationships
     public function customer(): BelongsTo
