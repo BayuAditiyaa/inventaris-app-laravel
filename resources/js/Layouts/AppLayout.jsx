@@ -25,6 +25,7 @@ export default function AppLayout({ children, user }) {
         { label: 'Stock Movements', route: '/stock-movements', icon: ArrowsRightLeftIcon },
         { label: 'Sales', route: '/sales', icon: ShoppingCartIcon },
         { label: 'Reports', route: '/reports', icon: ChartBarIcon },
+        
     ];
 
     return (
