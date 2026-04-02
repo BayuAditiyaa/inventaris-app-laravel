@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\DB;
 
 class SalesService
 {
-    protected InventoryService $inventoryService;
+    protected InventoryServices $inventoryService;
 
-    public function __construct(InventoryService $inventoryService)
+    public function __construct(InventoryServices $inventoryService)
     {
         $this->inventoryService = $inventoryService;
     }

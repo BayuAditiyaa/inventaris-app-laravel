@@ -56,7 +56,7 @@ export default function SalesIndex({ sales, customers, filters, auth }) {
                     </div>
                     <div className="bg-white rounded-lg shadow p-6">
                         <p className="text-gray-600 text-sm font-medium">Transactions (Period)</p>
-                        <p className="text-2xl font-bold text-gray-900 mt-2">{sales.meta.total}</p>
+                        <p className="text-2xl font-bold text-gray-900 mt-2">{sales.total}</p>
                     </div>
                 </div>
 
