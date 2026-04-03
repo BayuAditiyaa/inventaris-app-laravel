@@ -25,9 +25,9 @@ export default function AppLayout({ children, user }) {
         { label: 'Customers', route: '/customers', icon: UsersIcon },
         { label: 'Stock Movements', route: '/stock-movements', icon: ArrowsRightLeftIcon },
         { label: 'Sales', route: '/sales', icon: ShoppingCartIcon },
-        { label: 'Reports', route: '/reports', icon: ChartBarIcon },
         { label: 'Reports', route: '/reports/sales', icon: ChartBarIcon },
-
+        
+        
     ];
 
     return (
@@ -35,8 +35,9 @@ export default function AppLayout({ children, user }) {
             <Toast />
             {/* Sidebar */}
             <div
-                className={`${sidebarOpen ? 'w-64' : 'w-20'
-                    } bg-gray-900 text-white transition-all duration-300 flex flex-col fixed h-screen z-40`}
+                className={`${
+                    sidebarOpen ? 'w-64' : 'w-20'
+                } bg-gray-900 text-white transition-all duration-300 flex flex-col fixed h-screen z-40`}
             >
                 {/* Logo */}
                 <div className="p-6 border-b border-gray-800 flex items-center justify-between">
@@ -56,10 +57,11 @@ export default function AppLayout({ children, user }) {
                             <Link
                                 key={item.route}
                                 href={item.route}
-                                className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-colors ${active
+                                className={`flex items-center gap-4 px-4 py-3 rounded-lg transition-colors ${
+                                    active
                                         ? 'bg-blue-600 text-white'
                                         : 'text-gray-300 hover:bg-gray-800'
-                                    }`}
+                                }`}
                                 title={item.label}
                             >
                                 <Icon className="w-6 h-6 flex-shrink-0" />

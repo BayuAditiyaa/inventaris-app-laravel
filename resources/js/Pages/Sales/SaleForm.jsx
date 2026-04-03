@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { router, useForm } from '@inertiajs/react';
-import { TrashIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { TrashIcon, PlusIcon, ShoppingCartIcon } from '@heroicons/react/24/outline';
+import { toast } from 'sonner';
 
 export default function SaleForm({ products, customers }) {
     const { data, setData, post, processing, errors } = useForm({
@@ -16,7 +17,10 @@ export default function SaleForm({ products, customers }) {
 
     // Add product to cart
     const addToCart = () => {
-        if (!selectedProduct) return;
+        if (!selectedProduct) {
+            toast.error('Please select a product');
+            return;
+        }
 
         const product = products.find((p) => p.id == selectedProduct);
         if (!product) return;
@@ -25,17 +29,21 @@ export default function SaleForm({ products, customers }) {
         const existingItem = data.items.find((item) => item.product_id == selectedProduct);
 
         if (existingItem) {
-            // Update quantity
+            const newQty = Math.min(existingItem.qty + quantity, product.stock);
+            if (newQty === existingItem.qty) {
+                toast.warning('Max stock reached for this product');
+                return;
+            }
             setData({
                 ...data,
                 items: data.items.map((item) =>
                     item.product_id == selectedProduct
-                        ? { ...item, qty: Math.min(item.qty + quantity, product.stock) }
+                        ? { ...item, qty: newQty }
                         : item
                 ),
             });
+            toast.success(`Updated ${product.name}`);
         } else {
-            // Add new item
             setData({
                 ...data,
                 items: [
@@ -46,6 +54,7 @@ export default function SaleForm({ products, customers }) {
                     },
                 ],
             });
+            toast.success(`Added ${product.name} to cart`);
         }
 
         setSelectedProduct('');
@@ -54,10 +63,12 @@ export default function SaleForm({ products, customers }) {
 
     // Remove item from cart
     const removeFromCart = (productId) => {
+        const product = products.find((p) => p.id === productId);
         setData({
             ...data,
             items: data.items.filter((item) => item.product_id !== productId),
         });
+        toast.info(`Removed ${product.name} from cart`);
     };
 
     // Update quantity
@@ -70,11 +81,16 @@ export default function SaleForm({ products, customers }) {
             return;
         }
 
+        if (newQty > product.stock) {
+            toast.warning(`Only ${product.stock} items available`);
+            return;
+        }
+
         setData({
             ...data,
             items: data.items.map((item) =>
                 item.product_id === productId
-                    ? { ...item, qty: Math.min(newQty, product.stock) }
+                    ? { ...item, qty: newQty }
                     : item
             ),
         });
@@ -93,11 +109,20 @@ export default function SaleForm({ products, customers }) {
         e.preventDefault();
 
         if (data.items.length === 0) {
-            alert('Please add products to the sale');
+            toast.error('Please add products to the sale');
             return;
         }
 
-        post('/sales');
+        post('/sales', {
+            onSuccess: () => {
+                toast.success('Sale completed successfully!');
+            },
+            onError: (errors) => {
+                if (errors.error) {
+                    toast.error(errors.error);
+                }
+            },
+        });
     };
 
     return (
@@ -105,7 +130,7 @@ export default function SaleForm({ products, customers }) {
             {/* Left: Product Selection */}
             <div className="col-span-2 space-y-6">
                 {/* Product Selector */}
-                <div className="bg-white rounded-lg shadow p-6">
+                <div className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow">
                     <h2 className="text-lg font-semibold text-gray-900 mb-4">Add Products</h2>
 
                     <div className="space-y-4">
@@ -117,7 +142,7 @@ export default function SaleForm({ products, customers }) {
                                 <select
                                     value={selectedProduct}
                                     onChange={(e) => setSelectedProduct(e.target.value)}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all hover:border-gray-400"
                                 >
                                     <option value="">Select a product...</option>
                                     {products.map((p) => (
@@ -137,7 +162,7 @@ export default function SaleForm({ products, customers }) {
                                     min="1"
                                     value={quantity}
                                     onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all hover:border-gray-400"
                                 />
                             </div>
                         </div>
@@ -146,7 +171,7 @@ export default function SaleForm({ products, customers }) {
                             type="button"
                             onClick={addToCart}
                             disabled={!selectedProduct}
-                            className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors font-medium flex items-center justify-center gap-2"
+                            className="w-full px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-medium flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
                         >
                             <PlusIcon className="w-5 h-5" />
                             Add to Cart
@@ -155,9 +180,12 @@ export default function SaleForm({ products, customers }) {
                 </div>
 
                 {/* Cart Items */}
-                <div className="bg-white rounded-lg shadow overflow-hidden">
-                    <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
-                        <h2 className="text-lg font-semibold text-gray-900">Cart Items</h2>
+                <div className="bg-white rounded-lg shadow overflow-hidden hover:shadow-lg transition-shadow">
+                    <div className="px-6 py-4 bg-gradient-to-r from-blue-50 to-blue-100 border-b border-blue-200 flex items-center gap-2">
+                        <ShoppingCartIcon className="w-5 h-5 text-blue-600" />
+                        <h2 className="text-lg font-semibold text-gray-900">
+                            Cart Items ({data.items.length})
+                        </h2>
                     </div>
 
                     {data.items.length > 0 ? (
@@ -190,7 +218,7 @@ export default function SaleForm({ products, customers }) {
                                         const lineTotal = product.price * item.qty;
 
                                         return (
-                                            <tr key={item.product_id} className="hover:bg-gray-50">
+                                            <tr key={item.product_id} className="hover:bg-blue-50 transition-colors">
                                                 <td className="px-6 py-4 font-medium text-gray-900">
                                                     {product.name}
                                                     <p className="text-sm text-gray-600">{product.sku}</p>
@@ -207,7 +235,7 @@ export default function SaleForm({ products, customers }) {
                                                         onChange={(e) =>
                                                             updateQuantity(item.product_id, parseInt(e.target.value))
                                                         }
-                                                        className="w-16 px-2 py-1 border border-gray-300 rounded text-center focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                        className="w-16 px-2 py-1 border border-gray-300 rounded text-center focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all hover:border-gray-400"
                                                     />
                                                 </td>
                                                 <td className="px-6 py-4 text-right font-semibold text-gray-900">
@@ -217,7 +245,7 @@ export default function SaleForm({ products, customers }) {
                                                     <button
                                                         type="button"
                                                         onClick={() => removeFromCart(item.product_id)}
-                                                        className="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors"
+                                                        className="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-all"
                                                     >
                                                         <TrashIcon className="w-4 h-4" />
                                                     </button>
@@ -229,8 +257,10 @@ export default function SaleForm({ products, customers }) {
                             </table>
                         </div>
                     ) : (
-                        <div className="px-6 py-8 text-center text-gray-500">
-                            No products added yet.
+                        <div className="px-6 py-12 text-center">
+                            <ShoppingCartIcon className="w-12 h-12 text-gray-300 mx-auto mb-3" />
+                            <p className="text-gray-500 font-medium">No products added yet.</p>
+                            <p className="text-gray-400 text-sm">Select a product above to get started</p>
                         </div>
                     )}
                 </div>
@@ -239,7 +269,7 @@ export default function SaleForm({ products, customers }) {
             {/* Right: Summary */}
             <div className="space-y-6">
                 {/* Customer Info */}
-                <div className="bg-white rounded-lg shadow p-6">
+                <div className="bg-white rounded-lg shadow p-6 hover:shadow-lg transition-shadow">
                     <h2 className="text-lg font-semibold text-gray-900 mb-4">Customer</h2>
 
                     <div className="space-y-4">
@@ -253,7 +283,7 @@ export default function SaleForm({ products, customers }) {
                                 onChange={(e) => setData({ ...data, customer_name: e.target.value })}
                                 list="customer-list"
                                 placeholder="Walk-in or select..."
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all hover:border-gray-400"
                             />
                             <datalist id="customer-list">
                                 {customers.map((c) => (
@@ -270,7 +300,7 @@ export default function SaleForm({ products, customers }) {
                                 type="tel"
                                 value={data.customer_phone}
                                 onChange={(e) => setData({ ...data, customer_phone: e.target.value })}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all hover:border-gray-400"
                             />
                         </div>
 
@@ -282,17 +312,17 @@ export default function SaleForm({ products, customers }) {
                                 value={data.customer_address}
                                 onChange={(e) => setData({ ...data, customer_address: e.target.value })}
                                 rows="3"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all hover:border-gray-400"
                             />
                         </div>
                     </div>
                 </div>
 
                 {/* Summary */}
-                <div className="bg-white rounded-lg shadow p-6">
+                <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg shadow-lg p-6 border border-blue-200">
                     <h2 className="text-lg font-semibold text-gray-900 mb-4">Summary</h2>
 
-                    <div className="space-y-3 mb-6 pb-6 border-b border-gray-200">
+                    <div className="space-y-3 mb-6 pb-6 border-b-2 border-blue-300">
                         <div className="flex justify-between text-gray-700">
                             <span>Subtotal:</span>
                             <span className="font-medium">Rp {subtotal.toLocaleString('id-ID')}</span>
@@ -308,7 +338,7 @@ export default function SaleForm({ products, customers }) {
                                 max={subtotal}
                                 value={data.discount}
                                 onChange={(e) => setData({ ...data, discount: parseInt(e.target.value) || 0 })}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all hover:border-gray-400"
                             />
                         </div>
 
@@ -320,31 +350,32 @@ export default function SaleForm({ products, customers }) {
                         )}
                     </div>
 
-                    <div className="mb-6 pb-6 border-b border-gray-200">
-                        <div className="flex justify-between text-xl font-bold">
+                    <div className="mb-6 pb-6 border-b-2 border-blue-300">
+                        <div className="flex justify-between text-2xl font-bold">
                             <span>Total:</span>
                             <span className="text-green-600">Rp {total.toLocaleString('id-ID')}</span>
                         </div>
                     </div>
 
-                    {errors.error && (
-                        <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
-                            {errors.error}
-                        </div>
-                    )}
-
                     <button
                         type="submit"
                         disabled={processing || data.items.length === 0}
-                        className="w-full px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 transition-colors font-bold text-lg"
+                        className="w-full px-4 py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-bold text-lg shadow-lg hover:shadow-xl"
                     >
-                        {processing ? 'Processing...' : 'Complete Sale'}
+                        {processing ? (
+                            <span className="flex items-center justify-center gap-2">
+                                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                                Processing...
+                            </span>
+                        ) : (
+                            '✓ Complete Sale'
+                        )}
                     </button>
 
                     <button
                         type="button"
                         onClick={() => window.history.back()}
-                        className="w-full mt-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors font-medium"
+                        className="w-full mt-2 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-all font-medium"
                     >
                         Cancel
                     </button>
