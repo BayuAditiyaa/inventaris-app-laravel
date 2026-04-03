@@ -11,6 +11,7 @@ import {
     ChartBarIcon,
     ArrowRightOnRectangleIcon,
 } from '@heroicons/react/24/outline';
+import Toast from '@/Components/Toast';
 
 export default function AppLayout({ children, user }) {
     const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -30,6 +31,7 @@ export default function AppLayout({ children, user }) {
 
     return (
         <div className="flex h-screen bg-gray-100">
+            <Toast />
             {/* Sidebar */}
             <div
                 className={`${

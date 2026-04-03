@@ -174,7 +174,7 @@ export default function StockMovementIndex({ movements, products, filters, auth 
                                                 {movement.note || '-'}
                                             </td>
                                             <td className="px-6 py-4 text-sm text-gray-600">
-                                                {movement.created_by_user?.name}
+                                                {movement.created_by?.name}
                                             </td>
                                         </tr>
                                     ))
