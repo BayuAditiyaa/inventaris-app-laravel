@@ -30,33 +30,33 @@ export default function CustomersIndex({ customers, search, auth }) {
 
             <div className="space-y-6">
                 {/* Header */}
-                <div className="flex justify-between items-center">
+                <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
                     <div>
-                        <h1 className="text-3xl font-bold text-gray-900">Customers</h1>
-                        <p className="text-gray-600 mt-1">Manage your customer database</p>
+                        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Customers</h1>
+                        <p className="text-gray-600 dark:text-gray-400 mt-1 text-sm md:text-base">Manage your customer database</p>
                     </div>
                     <Link
                         href="/customers/create"
-                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all shadow-md hover:shadow-lg"
+                        className="px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-all shadow-md hover:shadow-lg text-center text-sm md:text-base"
                     >
                         + Add Customer
                     </Link>
                 </div>
 
                 {/* Search Box */}
-                <div className="bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow">
-                    <div className="flex gap-2">
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-3 md:p-4 hover:shadow-md transition-shadow">
+                    <div className="flex flex-col md:flex-row gap-2">
                         <input
                             type="text"
                             placeholder="Search by name or phone..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all hover:border-gray-400"
+                            className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all hover:border-gray-400 text-sm md:text-base"
                         />
                         <button
                             onClick={handleSearch}
-                            className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-all"
+                            className="px-4 py-2 bg-gray-600 dark:bg-gray-700 text-white rounded-lg hover:bg-gray-700 dark:hover:bg-gray-600 transition-all text-sm md:text-base"
                         >
                             Search
                         </button>
@@ -64,36 +64,36 @@ export default function CustomersIndex({ customers, search, auth }) {
                 </div>
 
                 {/* Customers Table */}
-                <div className="bg-white rounded-lg shadow overflow-hidden hover:shadow-lg transition-shadow">
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden hover:shadow-lg transition-shadow">
                     <div className="overflow-x-auto">
                         <table className="w-full">
-                            <thead className="bg-gray-50 border-b border-gray-200">
+                            <thead className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
                                 <tr>
-                                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Name</th>
-                                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Phone</th>
-                                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Address</th>
-                                    <th className="px-6 py-3 text-center text-sm font-semibold text-gray-700">Actions</th>
+                                    <th className="px-3 md:px-6 py-3 text-left text-xs md:text-sm font-semibold text-gray-700 dark:text-gray-300">Name</th>
+                                    <th className="px-3 md:px-6 py-3 text-left text-xs md:text-sm font-semibold text-gray-700 dark:text-gray-300 hidden sm:table-cell">Phone</th>
+                                    <th className="px-3 md:px-6 py-3 text-left text-xs md:text-sm font-semibold text-gray-700 dark:text-gray-300 hidden lg:table-cell">Address</th>
+                                    <th className="px-3 md:px-6 py-3 text-center text-xs md:text-sm font-semibold text-gray-700 dark:text-gray-300">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-gray-200">
+                            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                                 {customers.data.length > 0 ? (
                                     customers.data.map((customer) => (
-                                        <tr key={customer.id} className="hover:bg-blue-50 transition-colors">
-                                            <td className="px-6 py-4 font-medium text-gray-900">{customer.name}</td>
-                                            <td className="px-6 py-4 text-gray-700">{customer.phone || '-'}</td>
-                                            <td className="px-6 py-4 text-gray-700 max-w-xs truncate">{customer.address || '-'}</td>
-                                            <td className="px-6 py-4 text-center">
+                                        <tr key={customer.id} className="hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors">
+                                            <td className="px-3 md:px-6 py-3 md:py-4 font-medium text-gray-900 dark:text-white text-sm md:text-base">{customer.name}</td>
+                                            <td className="px-3 md:px-6 py-3 md:py-4 text-gray-700 dark:text-gray-300 hidden sm:table-cell text-sm">{customer.phone || '-'}</td>
+                                            <td className="px-3 md:px-6 py-3 md:py-4 text-gray-700 dark:text-gray-300 max-w-xs truncate hidden lg:table-cell text-sm">{customer.address || '-'}</td>
+                                            <td className="px-3 md:px-6 py-3 md:py-4 text-center">
                                                 <div className="flex justify-center gap-2">
                                                     <Link
                                                         href={`/customers/${customer.id}/edit`}
-                                                        className="p-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-all"
+                                                        className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900 rounded-lg transition-all"
                                                         title="Edit"
                                                     >
                                                         <PencilIcon className="w-4 h-4" />
                                                     </Link>
                                                     <button
                                                         onClick={() => handleDelete(customer.id, customer.name)}
-                                                        className="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-all"
+                                                        className="p-2 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900 rounded-lg transition-all"
                                                         title="Delete"
                                                     >
                                                         <TrashIcon className="w-4 h-4" />
@@ -105,12 +105,12 @@ export default function CustomersIndex({ customers, search, auth }) {
                                 ) : (
                                     <tr>
                                         <td colSpan={4} className="px-6 py-12 text-center">
-                                            <div className="text-gray-500">
-                                                <UsersIcon className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                                                <p className="font-medium mb-1">No customers found</p>
-                                                <p className="text-sm">
+                                            <div className="text-gray-500 dark:text-gray-400">
+                                                <UsersIcon className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
+                                                <p className="font-medium mb-1 text-sm md:text-base">No customers found</p>
+                                                <p className="text-xs md:text-sm">
                                                     Try adjusting your search or{' '}
-                                                    <Link href="/customers/create" className="text-blue-600 hover:underline">
+                                                    <Link href="/customers/create" className="text-blue-600 dark:text-blue-400 hover:underline">
                                                         create a new one
                                                     </Link>
                                                 </p>
