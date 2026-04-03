@@ -2,8 +2,9 @@
 
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\StockMovementController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SaleController;
+use App\Http\Controllers\StockMovementController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -40,6 +41,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/sales', [SaleController::class, 'store'])->name('sales.store');
     Route::get('/sales/{sale}', [SaleController::class, 'show'])->name('sales.show');
     Route::get('/sales', [SaleController::class, 'index'])->name('sales.index');
+
+     // Reports
+    Route::get('/reports/sales', [ReportController::class, 'salesReport'])->name('reports.sales');
+    Route::get('/reports/low-stock', [ReportController::class, 'lowStockReport'])->name('reports.low-stock');
+    Route::get('/reports/product-performance', [ReportController::class, 'productPerformanceReport'])->name('reports.product-performance');
  
 });
 
