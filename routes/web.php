@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
@@ -46,6 +47,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/reports/sales', [ReportController::class, 'salesReport'])->name('reports.sales');
     Route::get('/reports/low-stock', [ReportController::class, 'lowStockReport'])->name('reports.low-stock');
     Route::get('/reports/product-performance', [ReportController::class, 'productPerformanceReport'])->name('reports.product-performance');
+
+      // Customers
+    Route::resource('customers', CustomerController::class);
  
 });
 

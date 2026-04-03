@@ -120,11 +120,10 @@ export default function ProductIndex({ products, search, auth }) {
                                             <td className="px-6 py-4 text-gray-700">Rp {product.price.toLocaleString('id-ID')}</td>
                                             <td className="px-6 py-4">
                                                 <span
-                                                    className={`px-3 py-1 rounded-full text-sm font-semibold transition-all ${
-                                                        product.stock <= product.stock_alert
+                                                    className={`px-3 py-1 rounded-full text-sm font-semibold transition-all ${product.stock <= product.stock_alert
                                                             ? 'bg-red-100 text-red-800 animate-pulse'
                                                             : 'bg-green-100 text-green-800'
-                                                    }`}
+                                                        }`}
                                                 >
                                                     {product.stock}
                                                 </span>
@@ -166,7 +165,7 @@ export default function ProductIndex({ products, search, auth }) {
                             </tbody>
                         </table>
                     </div>
-{/* Pagination */}
+                    {/* Pagination */}
                     <div className="px-6 py-4 border-t border-gray-200 flex justify-between items-center bg-gray-50">
                         <div className="text-sm text-gray-600">
                             Showing {products.from || 0} to {products.to || 0} of {products.total || 0}
@@ -178,11 +177,10 @@ export default function ProductIndex({ products, search, auth }) {
                                     <Link
                                         key={idx}
                                         href={link.url}
-                                        className={`px-3 py-1 text-sm rounded transition-all ${
-                                            link.active
+                                        className={`px-3 py-1 text-sm rounded transition-all ${link.active
                                                 ? 'bg-blue-600 text-white'
                                                 : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
-                                        }`}
+                                            }`}
                                         dangerouslySetInnerHTML={{ __html: link.label }}
                                     />
                                 ) : (
