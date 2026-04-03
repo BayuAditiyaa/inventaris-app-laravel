@@ -21,7 +21,7 @@ class CustomerController extends Controller
             ->orderBy('name')
             ->paginate(15);
 
-        return Inertia::render('Customers/Index', [
+        return Inertia::render('Customer/Index', [
             'customers' => $customers,
             'search' => request('search'),
         ]);
@@ -30,7 +30,7 @@ class CustomerController extends Controller
     // Create form
     public function create()
     {
-        return Inertia::render('Customers/Create');
+        return Inertia::render('Customer/Create');
     }
 
     // Store customer
@@ -54,7 +54,7 @@ class CustomerController extends Controller
     // Edit form
     public function edit(Customer $customer)
     {
-        return Inertia::render('Customers/Edit', [
+        return Inertia::render('Customer/Edit', [
             'customer' => $customer,
         ]);
     }
