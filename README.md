@@ -7,53 +7,82 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+# Breeze Inventory - Inventory Management System
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+A complete inventory management system built with Laravel 12, React, and Tailwind CSS.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+✅ **Product Management**
+- Create, read, update, delete products
+- Image uploads
+- SKU tracking
+- Cost & price management
+- Stock alerts
 
-## Learning Laravel
+✅ **Point of Sale (POS)**
+- Fast transaction processing
+- Multiple items per transaction
+- Discount support
+- Customer tracking
+- Invoice generation & printing
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+✅ **Inventory Management**
+- Real-time stock tracking
+- Stock in/out movements
+- Inventory adjustments
+- Low stock alerts
+- Movement history
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+✅ **Reports & Analytics**
+- Sales reports with date filtering
+- Product performance analysis
+- Best-selling products
+- Profit tracking
+- Low stock reports
 
-## Laravel Sponsors
+✅ **User Management**
+- Role-based access control
+- Admin & Staff roles
+- Secure authentication
+- Password hashing
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+✅ **User Experience**
+- Mobile responsive
+- Smooth animations
+- Toast notifications
+- Professional UI
 
-### Premium Partners
+## System Requirements
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+- PHP 8.3+
+- MySQL 8.0+
+- Node.js 18+
+- Composer 2+
+- Redis (optional, for caching)
 
-## Contributing
+## Installation
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Local Development
 
-## Code of Conduct
+```bash
+# Clone repository
+git clone https://github.com/your-repo/inventory-pro.git
+cd inventory-pro
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# Install dependencies
+composer install
+npm install
 
-## Security Vulnerabilities
+# Setup environment
+cp .env.example .env
+php artisan key:generate
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# Setup database
+php artisan migrate --seed
 
-## License
+# Build assets
+npm run dev
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# Start server
+php artisan serve
