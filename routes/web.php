@@ -6,6 +6,9 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\StockMovementController;
+use App\Models\Product;
+use App\Models\Sale;
+use App\Models\StockMovement;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -20,7 +23,33 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    $recentMovements = StockMovement::query()
+        ->with(['product', 'createdBy'])
+        ->latest()
+        ->limit(5)
+        ->get()
+        ->map(function (StockMovement $movement) {
+            return [
+                'id' => $movement->id,
+                'type' => $movement->type,
+                'type_label' => $movement->getTypeLabel(),
+                'qty_display' => $movement->getQtyDisplay(),
+                'note' => $movement->note,
+                'product_name' => $movement->product?->name,
+                'created_by' => $movement->createdBy?->name,
+                'created_at' => $movement->created_at?->toIso8601String(),
+            ];
+        });
+
+    return Inertia::render('Dashboard', [
+        'stats' => [
+            'total_products' => Product::query()->count(),
+            'low_stock_items' => Product::query()->whereColumn('stock', '<=', 'stock_alert')->count(),
+            'today_sales' => Sale::query()->whereDate('sold_at', today())->count(),
+            'total_revenue' => Sale::query()->sum('total'),
+        ],
+        'recentMovements' => $recentMovements,
+    ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -30,7 +59,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::resource('products', ProductController::class);
+    Route::resource('products', ProductController::class)->except('show');
 
      // Stock Movements
     Route::get('/stock-movements', [StockMovementController::class, 'index'])->name('stock-movements.index');
@@ -49,7 +78,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/reports/product-performance', [ReportController::class, 'productPerformanceReport'])->name('reports.product-performance');
 
       // Customers
-    Route::resource('customers', CustomerController::class);
+    Route::resource('customers', CustomerController::class)->except('show');
  
 });
 

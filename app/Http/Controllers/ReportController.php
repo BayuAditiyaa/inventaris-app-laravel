@@ -124,12 +124,14 @@ class ReportController extends Controller
 
         // Slow moving products
         $slowMoving = Product::query()
-            ->selectRaw('products.id, products.name, products.sku, products.stock, COALESCE(SUM(sale_items.qty), 0) as total_qty')
+            ->selectRaw('products.id, products.name, products.sku, products.stock, COALESCE(SUM(CASE WHEN sales.id IS NOT NULL THEN sale_items.qty ELSE 0 END), 0) as total_qty')
             ->leftJoin('sale_items', 'products.id', '=', 'sale_items.product_id')
-            ->leftJoin('sales', 'sale_items.sale_id', '=', 'sales.id')
-            ->whereBetween('sales.sold_at', [$dateFrom . ' 00:00:00', $dateTo . ' 23:59:59'])
+            ->leftJoin('sales', function ($join) use ($dateFrom, $dateTo) {
+                $join->on('sale_items.sale_id', '=', 'sales.id')
+                    ->whereBetween('sales.sold_at', [$dateFrom . ' 00:00:00', $dateTo . ' 23:59:59']);
+            })
             ->groupBy('products.id', 'products.name', 'products.sku', 'products.stock')
-            ->havingRaw('COALESCE(SUM(sale_items.qty), 0) < 5 OR COALESCE(SUM(sale_items.qty), 0) IS NULL')
+            ->havingRaw('COALESCE(SUM(CASE WHEN sales.id IS NOT NULL THEN sale_items.qty ELSE 0 END), 0) < 5')
             ->orderBy('total_qty')
             ->limit(10)
             ->get();

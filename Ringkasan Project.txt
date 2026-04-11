@@ -1,0 +1,173 @@
+Ringkasan Project
+“Project ini adalah aplikasi inventory management dan point of sale untuk bisnis skala kecil. Fungsinya untuk mengelola produk, stok, transaksi penjualan, customer, dan laporan bisnis dalam satu sistem.”
+
+Tech Stack
+
+Backend: Laravel 12
+Frontend: React + Inertia.js
+Styling: Tailwind CSS
+Database: MySQL
+Authentication: Laravel Breeze
+Library tambahan: Recharts, Sonner
+Fitur Utama
+
+Login / authentication
+Dashboard
+Manajemen produk
+Manajemen customer
+Stock movements
+Penjualan / POS
+Reporting / analytics
+Masalah Bisnis Yang Diselesaikan
+
+Mengurangi kesalahan pencatatan stok
+Menghubungkan penjualan langsung dengan inventory
+Menyimpan histori perubahan stok
+Mempermudah laporan penjualan dan performa produk
+Flow Bisnis Utama
+
+Admin membuat produk
+Admin atau staff mengelola stok lewat stock movement
+Kasir atau admin membuat transaksi penjualan
+Sistem memvalidasi stok
+Sale dan sale items disimpan
+Stok produk otomatis berkurang
+Histori stock movement tercatat
+Report menampilkan ringkasan bisnis
+Jenis Stock Movement
+
+in: stok masuk
+out: stok keluar
+adjust: koreksi stok
+Contoh Adjustment
+
+Sistem mencatat stok 20
+Stok fisik ternyata 17
+User pilih adjust, lalu decrease, qty 3
+Hasil: stok jadi 17 dan histori koreksi tersimpan
+Arsitektur
+
+Controller: handle request/response
+Form Request: validasi
+Model: representasi tabel
+Service: business logic
+Policy: authorization
+Inertia pages: frontend rendering
+Keputusan Teknis Penting
+“Saya memisahkan business logic ke service class supaya controller tetap clean dan mudah di-maintain.”
+
+Contoh:
+
+SalesService: logic penjualan
+InventoryServices: logic perubahan stok
+Kenapa Pakai Transaction
+“Saya menggunakan database transaction pada proses penjualan supaya pembuatan sale, sale items, dan pengurangan stok berjalan konsisten. Kalau satu step gagal, semuanya rollback.”
+
+Tabel Database Penting
+
+users
+products
+customers
+sales
+sale_items
+stock_movements
+Poin Desain Database Yang Bagus
+“Saya menyimpan unit_price dan unit_cost di sale_items, jadi laporan penjualan lama tetap akurat walaupun harga produk berubah di masa depan.”
+
+Reports
+
+Sales report
+Low stock report
+Product performance report
+Revenue dan transaction summary
+Kenapa Laravel + Inertia
+“Saya ingin tetap memakai kekuatan Laravel untuk routing, auth, dan validation, tapi juga mendapatkan pengalaman frontend yang lebih modern dengan React. Inertia memberi keseimbangan yang bagus antara backend dan frontend.”
+
+Security / Validation
+
+Route dilindungi middleware auth
+Validasi dilakukan di backend dengan Form Request
+Authorization memakai policy
+Business rules penting tetap dicek di server
+Pelajaran Yang Didapat
+
+Mendesain aplikasi berdasarkan flow bisnis, bukan hanya CRUD
+Pentingnya transaction untuk konsistensi data
+Memisahkan logic ke service layer
+Mendesain database agar reporting tetap akurat
+Menggabungkan Laravel dan React dengan rapi
+Hal Yang Paling Bisa Dibanggakan
+“Bagian yang paling saya banggakan adalah integrasi antara sales dan inventory, karena saat transaksi dibuat sistem langsung memvalidasi stok, menyimpan transaksi, mengurangi stok, dan mencatat histori movement.”
+
+Improvement Ke Depan
+
+Menambah test untuk flow bisnis
+Modul supplier / purchase
+Barcode scanning
+Export PDF/Excel
+Dashboard analytics yang lebih lengkap
+Role/permission yang lebih detail
+Jawaban Singkat Kalau Ditanya ‘Ceritakan Project Kamu’
+“Project ini adalah aplikasi inventory dan POS yang saya bangun dengan Laravel 12, React, Inertia, dan Tailwind. Sistem ini digunakan untuk mengelola produk, stok, customer, transaksi penjualan, dan laporan. Flow utamanya adalah ketika penjualan dibuat, sistem memvalidasi stok, menyimpan transaksi, mengurangi stok otomatis, dan mencatat histori stock movement. Dari sisi arsitektur, saya memisahkan controller, form request, model, policy, dan service supaya lebih clean dan maintainable. Saya juga menggunakan database transaction agar proses penjualan tetap konsisten.”
+
+Printable One-Page Version
+
+Project
+Inventory Management & POS System for small businesses.
+
+Purpose
+Centralize product, stock, sales, customer, and reporting workflows.
+
+Stack
+Laravel 12, React, Inertia.js, Tailwind CSS, MySQL, Breeze.
+
+Main Modules
+Products, Customers, Stock Movements, Sales, Reports, Authentication.
+
+Business Flow
+
+Create product
+Manage stock
+Create sale
+Validate stock
+Save sale + items
+Auto reduce stock
+Save stock movement history
+Show reports
+Stock Movement
+
+in = stock added
+out = stock reduced
+adjust = stock correction after physical counting
+Architecture
+
+Controller = request handling
+Form Request = validation
+Model = data layer
+Service = business logic
+Policy = authorization
+Inertia + React = UI layer
+Important Technical Decision
+Use service classes and DB transactions for consistent sales and inventory flow.
+
+Database
+Main tables: products, customers, sales, sale_items, stock_movements, users
+
+Strong Design Point
+sale_items stores unit_price and unit_cost snapshots for historical report accuracy.
+
+Reports
+Sales trends, low stock, product performance, revenue summary.
+
+What To Emphasize
+
+Not only CRUD, but business workflow
+Sales and inventory are integrated
+Data consistency matters
+Historical reporting is preserved
+Code is structured by responsibility
+Proud Part
+Sales flow automatically updates inventory and records movement history in one consistent process.
+
+Future Improvements
+More tests, supplier module, barcode support, export features, richer dashboard.

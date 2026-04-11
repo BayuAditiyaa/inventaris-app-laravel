@@ -32,7 +32,7 @@ export default function CustomersIndex({ customers, search, auth }) {
                 {/* Header */}
                 <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
                     <div>
-                        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Customers</h1>
+                        <h1 className="text-2xl md:text-3xl font-bold text-gray-700">Customers</h1>
                         <p className="text-gray-600 dark:text-gray-400 mt-1 text-sm md:text-base">Manage your customer database</p>
                     </div>
                     <Link
@@ -52,7 +52,7 @@ export default function CustomersIndex({ customers, search, auth }) {
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                             onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                            className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all hover:border-gray-400 text-sm md:text-base"
+                            className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 text-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all hover:border-gray-400 text-sm md:text-base"
                         />
                         <button
                             onClick={handleSearch}
@@ -79,7 +79,7 @@ export default function CustomersIndex({ customers, search, auth }) {
                                 {customers.data.length > 0 ? (
                                     customers.data.map((customer) => (
                                         <tr key={customer.id} className="hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors">
-                                            <td className="px-3 md:px-6 py-3 md:py-4 font-medium text-gray-900 dark:text-white text-sm md:text-base">{customer.name}</td>
+                                            <td className="px-3 md:px-6 py-3 md:py-4 font-medium text-gray-900 text-gray-700 text-sm md:text-base">{customer.name}</td>
                                             <td className="px-3 md:px-6 py-3 md:py-4 text-gray-700 dark:text-gray-300 hidden sm:table-cell text-sm">{customer.phone || '-'}</td>
                                             <td className="px-3 md:px-6 py-3 md:py-4 text-gray-700 dark:text-gray-300 max-w-xs truncate hidden lg:table-cell text-sm">{customer.address || '-'}</td>
                                             <td className="px-3 md:px-6 py-3 md:py-4 text-center">

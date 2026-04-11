@@ -83,7 +83,7 @@ class StockMovementController extends Controller
                 $this->inventoryService->decreaseStock($product, $qty, $note);
             } elseif ($type === 'adjust') {
                 // For adjust, qty is the delta (can be positive or negative)
-                $delta = request('adjustment_type') === 'increase' ? $qty : -$qty;
+                $delta = $request->adjustment_type === 'increase' ? $qty : -$qty;
                 $this->inventoryService->adjustStock($product, $delta, $note);
             }
 

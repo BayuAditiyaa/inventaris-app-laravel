@@ -17,6 +17,7 @@ class StoreStockMovementRequest extends FormRequest
             'product_id' => 'required|exists:products,id',
             'type' => 'required|in:in,out,adjust',
             'qty' => 'required|integer|min:1',
+            'adjustment_type' => 'required_if:type,adjust|in:increase,decrease',
             'note' => 'nullable|string|max:500',
         ];
     }
@@ -30,6 +31,8 @@ class StoreStockMovementRequest extends FormRequest
             'type.in' => 'Type must be in, out, or adjust',
             'qty.required' => 'Quantity is required',
             'qty.min' => 'Quantity must be at least 1',
+            'adjustment_type.required_if' => 'Adjust direction is required for stock adjustments',
+            'adjustment_type.in' => 'Adjust direction must be increase or decrease',
         ];
     }
 }

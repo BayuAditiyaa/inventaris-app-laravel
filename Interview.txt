@@ -1,0 +1,90 @@
+5-Minute Script
+“Let me walk you through the project from business, architecture, and technical perspectives.
+
+This project is an inventory management and POS system for a small business. The main problem it solves is that many businesses track stock, sales, and customer information separately, which creates errors and makes reporting difficult. So I built a centralized system where inventory operations and sales transactions are connected.
+
+From a feature perspective, the system includes authentication, a dashboard, product management, customer management, stock movements, sales processing, and reporting. Products can be created with SKU, cost, price, stock alert, and image. Customers can be managed for repeat sales. Stock movements allow the business to track inventory changes. Sales work like a simple cashier or POS screen. Reports give insight into revenue, low stock, and product performance.
+
+The core business flow is:
+First, an admin creates products.
+Second, stock is added or corrected using stock movements.
+Third, when a cashier or admin creates a sale, the system validates stock, calculates subtotal, discount, and total, then saves the transaction.
+Fourth, product stock is automatically reduced.
+Fifth, a stock movement record is created so the inventory history is auditable.
+Finally, reports summarize what happened in the business.
+
+One important concept in this project is stock adjustment. In addition to stock-in and stock-out, adjustment is used when the physical stock count differs from the system. For example, if the system says there are 20 units but the real count is 17, the user can create an adjustment decrease of 3. This makes the stock match reality while preserving movement history.
+
+From the technical side, the backend uses Laravel 12. I organized the backend into controllers, form requests, models, policies, services, and routes. Controllers are responsible for handling the request and returning the right Inertia page or redirect. Validation is handled in form request classes so rules stay centralized. Business logic like sales creation and stock updates is placed in service classes instead of controllers. That helped keep the code cleaner and easier to maintain.
+
+For example, the sale flow is implemented in a sales service. It validates stock, calculates totals, creates the sale and sale items, and updates inventory. I wrapped this in a database transaction because if one step fails, I don’t want partial data such as a saved sale without stock deduction. That was one of the most important design decisions in the project.
+
+On the frontend, I used React with Inertia.js. I chose this stack because it gives a smoother user experience than traditional multi-page Laravel views, but it’s still simpler than building a fully separate frontend and backend. Tailwind CSS was used for styling, and I also used supporting libraries for charts and notifications.
+
+For the database design, the main tables are users, products, customers, sales, sale_items, and stock_movements. A sale has many sale items, a product has many stock movements, and a customer can have many sales. A key decision was to store unit price and unit cost inside sale_items instead of always reading current product values. This preserves historical accuracy in reports even when prices change later.
+
+I also included authorization and validation. Routes are protected with authentication middleware, validation is handled on the server, and policies are used to restrict some actions based on role. That makes the app closer to a real business system rather than only a demo UI.
+
+If I continued improving this project, I would add more business tests, supplier and purchase-order modules, export features, barcode scanning, and more advanced dashboard analytics. Overall, this project helped me practice not only CRUD operations, but also business workflow modeling, service-layer design, transaction safety, and report-oriented database design.”
+
+Mock Q&A
+
+“Why did you build this project?”
+“I wanted to build something closer to a real business system than a simple CRUD demo. Inventory and POS are good examples because they involve relationships between products, stock, sales, and reports.”
+
+“What tech stack did you use?”
+“Laravel 12 for the backend, React with Inertia.js for the frontend, Tailwind CSS for styling, and MySQL for data storage. I also used Laravel Breeze for authentication.”
+
+“Why Laravel + Inertia instead of a separate API and React frontend?”
+“Inertia lets me keep Laravel routing, auth, validation, and backend-driven page flow while still building the UI with React. It gives a good balance between developer productivity and user experience.”
+
+“What are the main modules in the system?”
+“Authentication, dashboard, products, customers, stock movements, sales, and reports.”
+
+“How does the sales flow work?”
+“The user selects products and quantities, submits the sale, the backend validates stock, calculates totals, creates the sale, stores sale items, deducts product stock, and records stock movement history.”
+
+“Why did you use transactions?”
+“To keep data consistent. If sale creation succeeds but stock deduction fails, the system would become invalid. Transactions ensure the whole process succeeds or fails together.”
+
+“What is the purpose of stock movements?”
+“They create an audit trail of inventory changes. Instead of only changing the stock number directly, the system also stores the reason and type of movement.”
+
+“What’s the difference between stock-in, stock-out, and adjustment?”
+“Stock-in adds inventory, stock-out reduces inventory for outbound events, and adjustment is used to correct the stock when the physical count differs from the system.”
+
+“Can you give an example of adjustment?”
+“If the system says there are 20 units but the actual count is 17, the user performs an adjustment decrease of 3. That updates stock and preserves the correction history.”
+
+“What database tables are most important?”
+“Products, sales, sale_items, customers, and stock_movements. Those are the core transactional tables.”
+
+“Why store unit price and unit cost in sale_items?”
+“To preserve historical accuracy. If a product price changes later, old sales reports should still reflect the original sale value and margin.”
+
+“How did you structure the backend?”
+“I used controllers for request handling, form requests for validation, Eloquent models for data, policies for authorization, and service classes for business logic.”
+
+“What are service classes doing in your project?”
+“The sales service handles sale creation and customer association, while the inventory service handles stock-in, stock-out, and adjustment logic.”
+
+“How do you handle authorization?”
+“I use authentication middleware for access control and policies for role-based permissions on actions like creating, updating, and deleting.”
+
+“What did you learn from this project?”
+“I learned how to design around business workflows, not just database tables. I also learned how important transactions, service classes, and historical data snapshots are in real applications.”
+
+“What was the hardest part?”
+“Connecting sales and inventory correctly. The challenge was making sure stock is always accurate while preserving traceability through stock movements.”
+
+“What would you improve next?”
+“I’d add stronger business test coverage, supplier and purchase modules, richer dashboard analytics, and export features like PDF or Excel.”
+
+“How would this scale if used by a real company?”
+“I would improve indexing and query optimization, add more granular roles and permissions, build better reporting caches, and add more domain modules like suppliers, purchasing, and returns.”
+
+“What part are you most proud of?”
+“The integration between sales and stock updates. That flow reflects real business logic and uses transactions so the data stays reliable.”
+
+“If you had more time, what would you refactor?”
+“I would move the dashboard route logic into a dedicated controller, add more automated feature tests for sales and inventory, and clean up some presentation components for consistency.”

@@ -95,7 +95,7 @@ export default function ProductForm({ product }) {
                             className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-all ${
                                 errors.name
                                     ? 'border-red-500 dark:border-red-600 focus:ring-red-500'
-                                    : 'border-gray-300 dark:border-gray-600 dark:text-white focus:ring-blue-500 hover:border-gray-400'
+                                    : 'border-gray-300 dark:border-gray-600 text-gray-700 focus:ring-blue-500 hover:border-gray-400'
                             }`}
                         />
                         {errors.name && (
@@ -115,7 +115,7 @@ export default function ProductForm({ product }) {
                             className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-all ${
                                 errors.sku
                                     ? 'border-red-500 dark:border-red-600 focus:ring-red-500'
-                                    : 'border-gray-300 dark:border-gray-600 dark:text-white focus:ring-blue-500 hover:border-gray-400'
+                                    : 'border-gray-300 dark:border-gray-600 text-gray-700 focus:ring-blue-500 hover:border-gray-400'
                             }`}
                         />
                         {errors.sku && (
@@ -137,7 +137,7 @@ export default function ProductForm({ product }) {
                                 className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-all ${
                                     errors.cost
                                         ? 'border-red-500 dark:border-red-600 focus:ring-red-500'
-                                        : 'border-gray-300 dark:border-gray-600 dark:text-white focus:ring-blue-500 hover:border-gray-400'
+                                        : 'border-gray-300 dark:border-gray-600 text-gray-700 focus:ring-blue-500 hover:border-gray-400'
                                 }`}
                             />
                             {errors.cost && (
@@ -157,7 +157,7 @@ export default function ProductForm({ product }) {
                                 className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-all ${
                                     errors.price
                                         ? 'border-red-500 dark:border-red-600 focus:ring-red-500'
-                                        : 'border-gray-300 dark:border-gray-600 dark:text-white focus:ring-blue-500 hover:border-gray-400'
+                                        : 'border-gray-300 dark:border-gray-600 text-gray-700 focus:ring-blue-500 hover:border-gray-400'
                                 }`}
                             />
                             {errors.price && (
@@ -178,7 +178,7 @@ export default function ProductForm({ product }) {
                             className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-all ${
                                 errors.stock_alert
                                     ? 'border-red-500 dark:border-red-600 focus:ring-red-500'
-                                    : 'border-gray-300 dark:border-gray-600 dark:text-white focus:ring-blue-500 hover:border-gray-400'
+                                    : 'border-gray-300 dark:border-gray-600 text-gray-700 focus:ring-blue-500 hover:border-gray-400'
                             }`}
                         />
                         {errors.stock_alert && (
@@ -221,7 +221,7 @@ export default function ProductForm({ product }) {
                             type="file"
                             accept="image/*"
                             onChange={handleImageChange}
-                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:text-white rounded-lg text-sm cursor-pointer hover:border-gray-400 transition-all"
+                            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 rounded-lg text-sm cursor-pointer hover:border-gray-400 transition-all"
                         />
                         <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
                             JPG, PNG, GIF (max 2MB)

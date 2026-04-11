@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Sale;
 use App\Models\SaleItem;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class SalesService
 {
@@ -153,9 +154,13 @@ class SalesService
      */
     private function generateInvoiceNumber(): string
     {
-        $date = now()->format('Ymd');
-        $count = Sale::whereDate('created_at', now())->count() + 1;
-        return "INV-{$date}-" . str_pad($count, 4, '0', STR_PAD_LEFT);
+        do {
+            $timestamp = now()->format('Ymd-His');
+            $suffix = Str::upper(Str::random(4));
+            $invoiceNo = "INV-{$timestamp}-{$suffix}";
+        } while (Sale::where('invoice_no', $invoiceNo)->exists());
+
+        return $invoiceNo;
     }
 
     /**

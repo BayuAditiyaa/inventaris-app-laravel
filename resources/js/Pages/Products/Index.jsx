@@ -33,7 +33,7 @@ export default function ProductIndex({ products, search, auth }) {
                 {/* Header */}
                 <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
                     <div>
-                        <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Products</h1>
+                        <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Products</h1>
                         <p className="text-gray-600 dark:text-gray-400 mt-1 text-sm md:text-base">Manage your product inventory</p>
                     </div>
                     <Link
