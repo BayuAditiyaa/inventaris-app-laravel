@@ -79,7 +79,7 @@ export default function CustomersIndex({ customers, search, auth }) {
                                 {customers.data.length > 0 ? (
                                     customers.data.map((customer) => (
                                         <tr key={customer.id} className="hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors">
-                                            <td className="px-3 md:px-6 py-3 md:py-4 font-medium text-gray-900 text-gray-700 text-sm md:text-base">{customer.name}</td>
+                                            <td className="px-3 md:px-6 py-3 md:py-4 font-medium text-white text-sm md:text-base">{customer.name}</td>
                                             <td className="px-3 md:px-6 py-3 md:py-4 text-gray-700 dark:text-gray-300 hidden sm:table-cell text-sm">{customer.phone || '-'}</td>
                                             <td className="px-3 md:px-6 py-3 md:py-4 text-gray-700 dark:text-gray-300 max-w-xs truncate hidden lg:table-cell text-sm">{customer.address || '-'}</td>
                                             <td className="px-3 md:px-6 py-3 md:py-4 text-center">
