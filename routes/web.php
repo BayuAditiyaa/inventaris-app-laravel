@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
@@ -22,35 +23,9 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    $recentMovements = StockMovement::query()
-        ->with(['product', 'createdBy'])
-        ->latest()
-        ->limit(5)
-        ->get()
-        ->map(function (StockMovement $movement) {
-            return [
-                'id' => $movement->id,
-                'type' => $movement->type,
-                'type_label' => $movement->getTypeLabel(),
-                'qty_display' => $movement->getQtyDisplay(),
-                'note' => $movement->note,
-                'product_name' => $movement->product?->name,
-                'created_by' => $movement->createdBy?->name,
-                'created_at' => $movement->created_at?->toIso8601String(),
-            ];
-        });
-
-    return Inertia::render('Dashboard', [
-        'stats' => [
-            'total_products' => Product::query()->count(),
-            'low_stock_items' => Product::query()->whereColumn('stock', '<=', 'stock_alert')->count(),
-            'today_sales' => Sale::query()->whereDate('sold_at', today())->count(),
-            'total_revenue' => Sale::query()->sum('total'),
-        ],
-        'recentMovements' => $recentMovements,
-    ]);
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
