@@ -19,9 +19,9 @@ class SaleItemFactory extends Factory
      */
     public function definition(): array
     {
-        $qty = fake()->numberBetween(1, 5);
-        $unitPrice = fake()->numberBetween(20000, 100000);
-        $unitCost = fake()->numberBetween(10000, $unitPrice);
+        $qty = $this->faker->numberBetween(1, 5);
+        $unitPrice = $this->faker->numberBetween(20000, 100000);
+        $unitCost = $this->faker->numberBetween(10000, $unitPrice);
 
         return [
             'sale_id' => Sale::factory(),
