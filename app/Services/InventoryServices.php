@@ -11,14 +11,16 @@ class InventoryServices
     /**
      * Increase stock (e.g., received goods)
      */
-    public function increaseStock(Product $product, int $qty, string $note = '', ?int $userId = null): StockMovement
+    public function increaseStock(Product $product, int $qty, string $note = '', ?int $userId = null, $refType = null, $refId = null): StockMovement
     {
-        return DB::transaction(function () use ($product, $qty, $note, $userId) {
+        return DB::transaction(function () use ($product, $qty, $note, $userId, $refType, $refId) {
             $movement = StockMovement::create([
                 'product_id' => $product->id,
                 'type' => 'in',
                 'qty' => $qty,
                 'note' => $note,
+                'ref_type' => $refType,
+                'ref_id' => $refId,
                 'created_by' => $userId ?? auth()->id(),
             ]);
 
@@ -60,6 +62,10 @@ class InventoryServices
     public function adjustStock(Product $product, int $delta, string $note = '', ?int $userId = null): StockMovement
     {
         return DB::transaction(function () use ($product, $delta, $note, $userId) {
+            if ($delta < 0 && $product->stock < abs($delta)) {
+                throw new \Exception("Insufficient stock for {$product->name}. Available: {$product->stock}, Requested adjustment: ".abs($delta));
+            }
+
             $movement = StockMovement::create([
                 'product_id' => $product->id,
                 'type' => 'adjust',

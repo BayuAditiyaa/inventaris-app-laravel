@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
+use App\Services\ActivityLogService;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Gate;
 
 class ProductController extends Controller
 {
+    public function __construct(protected ActivityLogService $activityLogService)
+    {
+    }
 
 
     // List products (paginated)
@@ -51,7 +55,7 @@ class ProductController extends Controller
             $imagePath = $request->file('image')->store('products', 'public');
         }
 
-        Product::create([
+        $product = Product::create([
             'name' => $request->name,
             'sku' => $request->sku,
             'cost' => (int)$request->cost,
@@ -59,6 +63,13 @@ class ProductController extends Controller
             'stock_alert' => $request->stock_alert,
             'image_path' => $imagePath,
         ]);
+
+        $this->activityLogService->log(
+            'product.created',
+            "Created product {$product->name}",
+            $product,
+            ['sku' => $product->sku, 'price' => $product->price]
+        );
 
         return redirect()->route('products.index')
             ->with('success', 'Product created successfully.');
@@ -96,6 +107,13 @@ class ProductController extends Controller
             'image_path' => $imagePath,
         ]);
 
+        $this->activityLogService->log(
+            'product.updated',
+            "Updated product {$product->name}",
+            $product,
+            ['sku' => $product->sku, 'price' => $product->price]
+        );
+
         return redirect()->route('products.index')
             ->with('success', 'Product updated successfully.');
     }
@@ -105,11 +123,21 @@ class ProductController extends Controller
     {
         Gate::authorize('delete', $product);
 
+        $productName = $product->name;
+        $productSku = $product->sku;
+
         if ($product->image_path) {
             Storage::disk('public')->delete($product->image_path);
         }
 
         $product->delete();
+
+        $this->activityLogService->log(
+            'product.deleted',
+            "Deleted product {$productName}",
+            null,
+            ['sku' => $productSku, 'product_name' => $productName]
+        );
 
         return redirect()->route('products.index')
             ->with('success', 'Product deleted successfully.');

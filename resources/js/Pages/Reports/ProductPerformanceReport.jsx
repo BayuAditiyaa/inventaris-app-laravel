@@ -11,15 +11,34 @@ export default function ProductPerformanceReport({ bestSelling, mostProfitable, 
         router.get('/reports/product-performance', { date_from: dateFrom, date_to: dateTo });
     };
 
+    const exportCsvUrl = `/reports/product-performance/export?date_from=${dateFrom}&date_to=${dateTo}`;
+    const exportPdfUrl = `/reports/product-performance/pdf?date_from=${dateFrom}&date_to=${dateTo}`;
+
     return (
         <AuthenticatedLayout user={auth.user}>
             <Head title="Product Performance Report" />
 
             <div className="space-y-6">
                 {/* Header */}
-                <div>
-                    <h1 className="text-3xl font-bold text-gray-900">Product Performance Report</h1>
-                    <p className="text-gray-600 mt-1">Analyze product sales and profitability</p>
+                <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                    <div>
+                        <h1 className="text-3xl font-bold text-gray-900">Product Performance Report</h1>
+                        <p className="text-gray-600 mt-1">Analyze product sales and profitability</p>
+                    </div>
+                    <div className="flex gap-2">
+                        <a
+                            href={exportPdfUrl}
+                            className="inline-flex items-center justify-center rounded-lg bg-slate-700 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-slate-800"
+                        >
+                            Export PDF
+                        </a>
+                        <a
+                            href={exportCsvUrl}
+                            className="inline-flex items-center justify-center rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700"
+                        >
+                            Export CSV
+                        </a>
+                    </div>
                 </div>
 
                 {/* Date Filter */}

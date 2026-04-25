@@ -1,214 +1,134 @@
-import { Head, router } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
-export default function ProductPerformanceReport({ bestSelling, mostProfitable, slowMoving, filters, auth }) {
-    const [dateFrom, setDateFrom] = useState(filters.date_from);
-    const [dateTo, setDateTo] = useState(filters.date_to);
-
-    const handleFilter = () => {
-        router.get('/reports/product-performance', { date_from: dateFrom, date_to: dateTo });
-    };
+export default function LowStockReport({ products, stats, auth }) {
+    const exportCsvUrl = '/reports/low-stock/export';
+    const exportPdfUrl = '/reports/low-stock/pdf';
 
     return (
         <AuthenticatedLayout user={auth.user}>
-            <Head title="Product Performance Report" />
+            <Head title="Low Stock Report" />
 
-            <div className="space-y-4 sm:space-y-6">
-                {/* Header */}
-                <div className="px-2 sm:px-0">
-                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Product Performance</h1>
-                    <p className="text-sm sm:text-base text-gray-600 mt-1">Analyze product sales and profitability</p>
-                </div>
-
-                {/* Date Filter */}
-                <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                        <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-1 sm:mb-2">From Date</label>
-                            <input
-                                type="date"
-                                value={dateFrom}
-                                onChange={(e) => setDateFrom(e.target.value)}
-                                className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-semibold text-gray-700 mb-1 sm:mb-2">To Date</label>
-                            <input
-                                type="date"
-                                value={dateTo}
-                                onChange={(e) => setDateTo(e.target.value)}
-                                className="w-full px-3 py-2 sm:px-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
-                        </div>
-
-                        <div className="flex items-end mt-2 sm:mt-0 sm:col-span-2 md:col-span-1">
-                            <button
-                                onClick={handleFilter}
-                                className="w-full px-4 py-2 sm:py-3 md:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium shadow-sm hover:shadow-md"
-                            >
-                                Filter
-                            </button>
-                        </div>
+            <div className="space-y-6">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div>
+                        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Low Stock Report</h1>
+                        <p className="text-sm sm:text-base text-gray-600 mt-1">
+                            Monitor products that need replenishment soon.
+                        </p>
+                    </div>
+                    <div className="flex gap-2">
+                        <a
+                            href={exportPdfUrl}
+                            className="inline-flex items-center justify-center rounded-lg bg-slate-700 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-slate-800"
+                        >
+                            Export PDF
+                        </a>
+                        <a
+                            href={exportCsvUrl}
+                            className="inline-flex items-center justify-center rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700"
+                        >
+                            Export CSV
+                        </a>
+                        <Link
+                            href="/stock-movements/create"
+                            className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+                        >
+                            Record Stock Movement
+                        </Link>
                     </div>
                 </div>
 
-                {/* Best Selling Chart */}
-                <div className="bg-white rounded-lg shadow p-4 sm:p-6">
-                    <h2 className="text-base sm:text-lg font-semibold text-gray-900 mb-4">🏆 Best Selling Products</h2>
-                    <div className="w-full overflow-hidden -ml-4 sm:ml-0">
-                        <ResponsiveContainer width="100%" height={250} className="sm:h-[300px]">
-                            <BarChart data={bestSelling.map(item => ({
-                                name: item.name,
-                                qty: item.total_qty || 0,
-                            }))} margin={{ top: 5, right: 20, bottom: 40, left: 0 }}>
-                                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                                {/* Adjusted angle and height for mobile */}
-                                <XAxis dataKey="name" angle={-45} textAnchor="end" height={80} tick={{fontSize: 11}} />
-                                <YAxis tick={{fontSize: 12}} width={40} />
-                                <Tooltip cursor={{fill: '#f3f4f6'}} />
-                                <Bar dataKey="qty" fill="#10b981" radius={[4, 4, 0, 0]} />
-                            </BarChart>
-                        </ResponsiveContainer>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+                    <div className="bg-white rounded-lg shadow p-6">
+                        <p className="text-sm font-medium text-gray-600">Products Below Alert</p>
+                        <p className="mt-2 text-3xl font-bold text-red-600">{stats?.count || 0}</p>
+                    </div>
+                    <div className="bg-white rounded-lg shadow p-6">
+                        <p className="text-sm font-medium text-gray-600">Current Stock Total</p>
+                        <p className="mt-2 text-3xl font-bold text-gray-900">{stats?.total_stock || 0}</p>
+                    </div>
+                    <div className="bg-white rounded-lg shadow p-6">
+                        <p className="text-sm font-medium text-gray-600">Alert Threshold Total</p>
+                        <p className="mt-2 text-3xl font-bold text-amber-600">{stats?.total_alert || 0}</p>
                     </div>
                 </div>
 
-                {/* Best Selling Table */}
                 <div className="bg-white rounded-lg shadow overflow-hidden">
-                    <div className="px-4 py-3 sm:px-6 sm:py-4 bg-gray-50 border-b border-gray-200">
-                        <h3 className="text-base sm:text-lg font-semibold text-gray-900">Top 10 Best Sellers</h3>
+                    <div className="px-4 sm:px-6 py-4 border-b border-gray-200 bg-gray-50">
+                        <h2 className="text-lg font-semibold text-gray-900">Products Requiring Attention</h2>
                     </div>
-                    <div className="w-full">
-                        <table className="w-full">
-                            <thead className="bg-gray-50 border-b border-gray-200">
-                                <tr>
-                                    <th className="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-semibold text-gray-700">Product</th>
-                                    {/* Hide Qty on Mobile */}
-                                    <th className="hidden sm:table-cell px-4 sm:px-6 py-3 text-right text-xs sm:text-sm font-semibold text-gray-700">Qty Sold</th>
-                                    <th className="px-4 sm:px-6 py-3 text-right text-xs sm:text-sm font-semibold text-gray-700">Revenue</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-200">
-                                {bestSelling.map((item) => (
-                                    <tr key={item.id} className="hover:bg-gray-50">
-                                        <td className="px-4 sm:px-6 py-3 sm:py-4">
-                                            <p className="font-medium text-gray-900 text-sm sm:text-base">{item.name}</p>
-                                            <p className="text-xs sm:text-sm text-gray-600">{item.sku}</p>
-                                            {/* Mobile Fallback */}
-                                            <div className="sm:hidden text-xs text-blue-600 mt-1 font-medium">
-                                                {item.total_qty || 0} units sold
-                                            </div>
-                                        </td>
-                                        <td className="hidden sm:table-cell px-4 sm:px-6 py-3 sm:py-4 text-right font-semibold text-gray-900 text-sm sm:text-base">
-                                            {item.total_qty || 0}
-                                        </td>
-                                        <td className="px-4 sm:px-6 py-3 sm:py-4 text-right text-gray-700 text-sm sm:text-base whitespace-nowrap">
-                                            Rp {(item.total_revenue || 0).toLocaleString('id-ID')}
-                                        </td>
+
+                    {products.data.length === 0 ? (
+                        <div className="px-6 py-12 text-center text-gray-500">
+                            No low stock items found. Inventory levels look healthy.
+                        </div>
+                    ) : (
+                        <div className="overflow-x-auto">
+                            <table className="w-full">
+                                <thead className="bg-gray-50 border-b border-gray-200">
+                                    <tr>
+                                        <th className="px-4 sm:px-6 py-3 text-left text-sm font-semibold text-gray-700">Product</th>
+                                        <th className="px-4 sm:px-6 py-3 text-left text-sm font-semibold text-gray-700">SKU</th>
+                                        <th className="px-4 sm:px-6 py-3 text-right text-sm font-semibold text-gray-700">Current Stock</th>
+                                        <th className="px-4 sm:px-6 py-3 text-right text-sm font-semibold text-gray-700">Alert Level</th>
+                                        <th className="px-4 sm:px-6 py-3 text-right text-sm font-semibold text-gray-700">Gap</th>
+                                        <th className="px-4 sm:px-6 py-3 text-center text-sm font-semibold text-gray-700">Action</th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                                </thead>
+                                <tbody className="divide-y divide-gray-200">
+                                    {products.data.map((product) => {
+                                        const deficit = Math.max((product.stock_alert || 0) - (product.stock || 0), 0);
 
-                {/* Most Profitable Table */}
-                <div className="bg-white rounded-lg shadow overflow-hidden">
-                    <div className="px-4 py-3 sm:px-6 sm:py-4 bg-gray-50 border-b border-gray-200">
-                        <h3 className="text-base sm:text-lg font-semibold text-gray-900">💰 Most Profitable</h3>
-                    </div>
-                    <div className="w-full">
-                        <table className="w-full">
-                            <thead className="bg-gray-50 border-b border-gray-200">
-                                <tr>
-                                    <th className="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-semibold text-gray-700">Product</th>
-                                    {/* Hide detailed costs on Mobile/Tablet */}
-                                    <th className="hidden md:table-cell px-4 sm:px-6 py-3 text-right text-xs sm:text-sm font-semibold text-gray-700">Unit Cost</th>
-                                    <th className="hidden md:table-cell px-4 sm:px-6 py-3 text-right text-xs sm:text-sm font-semibold text-gray-700">Unit Price</th>
-                                    <th className="hidden sm:table-cell px-4 sm:px-6 py-3 text-right text-xs sm:text-sm font-semibold text-gray-700">Qty Sold</th>
-                                    <th className="px-4 sm:px-6 py-3 text-right text-xs sm:text-sm font-semibold text-gray-700">Profit</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-200">
-                                {mostProfitable.map((item) => {
-                                    // FIXED MATH BUG: Using item.price and item.cost
-                                    const profit = (item.price - item.cost) * (item.total_qty || 0);
-                                    return (
-                                        <tr key={item.id} className="hover:bg-gray-50">
-                                            <td className="px-4 sm:px-6 py-3 sm:py-4">
-                                                <p className="font-medium text-gray-900 text-sm sm:text-base">{item.name}</p>
-                                                <p className="text-xs sm:text-sm text-gray-600">{item.sku}</p>
-                                                {/* Mobile Fallback: Shows quantity sold on tiny screens */}
-                                                <div className="sm:hidden text-xs text-gray-500 mt-1">
-                                                    {item.total_qty || 0} units sold
-                                                </div>
-                                            </td>
-                                            <td className="hidden md:table-cell px-4 sm:px-6 py-3 sm:py-4 text-right text-gray-700 text-sm sm:text-base whitespace-nowrap">
-                                                Rp {item.cost.toLocaleString('id-ID')}
-                                            </td>
-                                            <td className="hidden md:table-cell px-4 sm:px-6 py-3 sm:py-4 text-right text-gray-700 text-sm sm:text-base whitespace-nowrap">
-                                                Rp {item.price.toLocaleString('id-ID')}
-                                            </td>
-                                            <td className="hidden sm:table-cell px-4 sm:px-6 py-3 sm:py-4 text-right text-gray-700 text-sm sm:text-base">
-                                                {item.total_qty || 0}
-                                            </td>
-                                            <td className="px-4 sm:px-6 py-3 sm:py-4 text-right font-bold text-green-600 text-sm sm:text-base whitespace-nowrap">
-                                                Rp {profit.toLocaleString('id-ID')}
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+                                        return (
+                                            <tr key={product.id} className="hover:bg-gray-50">
+                                                <td className="px-4 sm:px-6 py-4 font-medium text-gray-900">{product.name}</td>
+                                                <td className="px-4 sm:px-6 py-4 text-sm text-gray-600">{product.sku}</td>
+                                                <td className="px-4 sm:px-6 py-4 text-right font-semibold text-red-600">{product.stock}</td>
+                                                <td className="px-4 sm:px-6 py-4 text-right text-gray-700">{product.stock_alert}</td>
+                                                <td className="px-4 sm:px-6 py-4 text-right text-amber-600 font-semibold">{deficit}</td>
+                                                <td className="px-4 sm:px-6 py-4 text-center">
+                                                    <Link
+                                                        href={`/stock-movements/create?product_id=${product.id}`}
+                                                        className="inline-flex items-center rounded-lg bg-amber-100 px-3 py-1.5 text-xs font-semibold text-amber-800 transition-colors hover:bg-amber-200"
+                                                    >
+                                                        Restock
+                                                    </Link>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+                    )}
 
-                {/* Slow Moving Table */}
-                <div className="bg-white rounded-lg shadow overflow-hidden">
-                    <div className="px-4 py-3 sm:px-6 sm:py-4 bg-gray-50 border-b border-gray-200">
-                        <h3 className="text-base sm:text-lg font-semibold text-gray-900">🐌 Slow Moving Products</h3>
-                    </div>
-                    <div className="w-full">
-                        <table className="w-full">
-                            <thead className="bg-gray-50 border-b border-gray-200">
-                                <tr>
-                                    <th className="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-semibold text-gray-700">Product</th>
-                                    {/* Hide stats on mobile, put them under the name */}
-                                    <th className="hidden sm:table-cell px-4 sm:px-6 py-3 text-right text-xs sm:text-sm font-semibold text-gray-700">Current Stock</th>
-                                    <th className="hidden sm:table-cell px-4 sm:px-6 py-3 text-right text-xs sm:text-sm font-semibold text-gray-700">Qty Sold</th>
-                                    <th className="px-4 sm:px-6 py-3 text-center text-xs sm:text-sm font-semibold text-gray-700">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-200">
-                                {slowMoving.map((item) => (
-                                    <tr key={item.id} className="hover:bg-gray-50">
-                                        <td className="px-4 sm:px-6 py-3 sm:py-4">
-                                            <p className="font-medium text-gray-900 text-sm sm:text-base">{item.name}</p>
-                                            <p className="text-xs sm:text-sm text-gray-600">{item.sku}</p>
-                                            {/* Mobile Fallback */}
-                                            <div className="sm:hidden flex items-center gap-3 text-xs text-gray-500 mt-2">
-                                                <span>Stock: <strong className="text-gray-700">{item.stock}</strong></span>
-                                                <span>Sold: <strong className="text-red-600">{item.total_qty || 0}</strong></span>
-                                            </div>
-                                        </td>
-                                        <td className="hidden sm:table-cell px-4 sm:px-6 py-3 sm:py-4 text-right text-gray-700 text-sm sm:text-base">
-                                            {item.stock}
-                                        </td>
-                                        <td className="hidden sm:table-cell px-4 sm:px-6 py-3 sm:py-4 text-right font-semibold text-red-600 text-sm sm:text-base">
-                                            {item.total_qty || 0}
-                                        </td>
-                                        <td className="px-4 sm:px-6 py-3 sm:py-4 text-center">
-                                            <span className="px-2 py-1 sm:px-3 sm:py-1 bg-yellow-100 text-yellow-800 text-[10px] sm:text-xs font-semibold rounded-full whitespace-nowrap">
-                                                Consider Discount
-                                            </span>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                    <div className="px-6 py-4 border-t border-gray-200 flex justify-between items-center bg-gray-50">
+                        <div className="text-sm text-gray-600">
+                            Showing {products.from || 0} to {products.to || 0} of {products.total || 0}
+                        </div>
+                        <div className="space-x-1 flex">
+                            {products.links.map((link, idx) => (
+                                link.url ? (
+                                    <Link
+                                        key={idx}
+                                        href={link.url}
+                                        className={`px-3 py-1 text-sm rounded transition-all ${
+                                            link.active
+                                                ? 'bg-blue-600 text-white'
+                                                : 'bg-gray-200 hover:bg-gray-300 text-gray-700'
+                                        }`}
+                                        dangerouslySetInnerHTML={{ __html: link.label }}
+                                    />
+                                ) : (
+                                    <span
+                                        key={idx}
+                                        className="px-3 py-1 text-sm rounded bg-gray-100 text-gray-400 cursor-not-allowed"
+                                        dangerouslySetInnerHTML={{ __html: link.label }}
+                                    />
+                                )
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>

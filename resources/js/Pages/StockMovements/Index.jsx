@@ -7,6 +7,7 @@ export default function StockMovementIndex({ movements, products, filters, auth 
     const [type, setType] = useState(filters.type || '');
     const [dateFrom, setDateFrom] = useState(filters.date_from || '');
     const [dateTo, setDateTo] = useState(filters.date_to || '');
+    const isAdmin = auth.user.role === 'admin';
 
     const handleFilter = () => {
         const params = new URLSearchParams();
@@ -62,12 +63,14 @@ export default function StockMovementIndex({ movements, products, filters, auth 
                         <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Stock Movements</h1>
                         <p className="text-gray-600 dark:text-gray-400 mt-1 text-sm md:text-base">Track inventory changes</p>
                     </div>
-                    <Link
-                        href="/stock-movements/create"
-                        className="px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-all font-medium text-center text-sm md:text-base shadow-md hover:shadow-lg"
-                    >
-                        + Create Movement
-                    </Link>
+                    {isAdmin && (
+                        <Link
+                            href="/stock-movements/create"
+                            className="px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-all font-medium text-center text-sm md:text-base shadow-md hover:shadow-lg"
+                        >
+                            + Create Movement
+                        </Link>
+                    )}
                 </div>
 
                 {/* Filters */}

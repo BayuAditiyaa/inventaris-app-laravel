@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 
 export default function CustomersIndex({ customers, search, auth }) {
     const [searchTerm, setSearchTerm] = useState(search || '');
+    const isAdmin = auth.user.role === 'admin';
 
     const handleSearch = () => {
         router.get('/customers', { search: searchTerm }, { preserveState: true });
@@ -91,13 +92,15 @@ export default function CustomersIndex({ customers, search, auth }) {
                                                     >
                                                         <PencilIcon className="w-4 h-4" />
                                                     </Link>
-                                                    <button
-                                                        onClick={() => handleDelete(customer.id, customer.name)}
-                                                        className="p-2 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900 rounded-lg transition-all"
-                                                        title="Delete"
-                                                    >
-                                                        <TrashIcon className="w-4 h-4" />
-                                                    </button>
+                                                    {isAdmin && (
+                                                        <button
+                                                            onClick={() => handleDelete(customer.id, customer.name)}
+                                                            className="p-2 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900 rounded-lg transition-all"
+                                                            title="Delete"
+                                                        >
+                                                            <TrashIcon className="w-4 h-4" />
+                                                        </button>
+                                                    )}
                                                 </div>
                                             </td>
                                         </tr>

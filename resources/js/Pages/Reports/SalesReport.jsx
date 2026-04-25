@@ -11,16 +11,33 @@ export default function SalesReport({ salesByDate, salesByCustomer, salesByCashi
         router.get('/reports/sales', { date_from: dateFrom, date_to: dateTo });
     };
 
+    const exportCsvUrl = `/reports/sales/export?date_from=${dateFrom}&date_to=${dateTo}`;
+    const exportPdfUrl = `/reports/sales/pdf?date_from=${dateFrom}&date_to=${dateTo}`;
+
     return (
         <AuthenticatedLayout user={auth.user}>
             <Head title="Sales Report" />
 
             <div className="space-y-6">
                 {/* Header */}
-                <div>
+                <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                     <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Sales Report</h1>
-                    <p className="text-sm sm:text-base text-gray-600 mt-1">Track your sales performance and trends</p>
+                    <div className="flex gap-2">
+                        <a
+                            href={exportPdfUrl}
+                            className="inline-flex items-center justify-center rounded-lg bg-slate-700 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-slate-800"
+                        >
+                            Export PDF
+                        </a>
+                        <a
+                            href={exportCsvUrl}
+                            className="inline-flex items-center justify-center rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700"
+                        >
+                            Export CSV
+                        </a>
+                    </div>
                 </div>
+                <p className="text-sm sm:text-base text-gray-600 mt-1">Track your sales performance and trends</p>
 
                 {/* Date Filter */}
                 <div className="bg-white rounded-lg shadow p-4 sm:p-6">

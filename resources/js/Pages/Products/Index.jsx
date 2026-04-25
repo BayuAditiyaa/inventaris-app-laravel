@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 export default function ProductIndex({ products, search, auth }) {
     const [searchTerm, setSearchTerm] = useState(search || '');
     const [imagePreview, setImagePreview] = useState(null);
+    const isAdmin = auth.user.role === 'admin';
 
     const handleSearch = () => {
         router.get('/products', { search: searchTerm }, { preserveState: true });
@@ -36,12 +37,14 @@ export default function ProductIndex({ products, search, auth }) {
                         <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Products</h1>
                         <p className="text-gray-600 dark:text-gray-400 mt-1 text-sm md:text-base">Manage your product inventory</p>
                     </div>
-                    <Link
-                        href="/products/create"
-                        className="px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-all shadow-md hover:shadow-lg text-center"
-                    >
-                        + Create Product
-                    </Link>
+                    {isAdmin && (
+                        <Link
+                            href="/products/create"
+                            className="px-4 py-2 bg-blue-600 dark:bg-blue-700 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-all shadow-md hover:shadow-lg text-center"
+                        >
+                            + Create Product
+                        </Link>
+                    )}
                 </div>
 
                 {/* Search Box */}
@@ -127,22 +130,26 @@ export default function ProductIndex({ products, search, auth }) {
                                                 </span>
                                             </td>
                                             <td className="px-3 md:px-6 py-3 md:py-4 text-center">
-                                                <div className="flex justify-center gap-2">
-                                                    <Link
-                                                        href={`/products/${product.id}/edit`}
-                                                        className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900 rounded-lg transition-all"
-                                                        title="Edit"
-                                                    >
-                                                        <PencilIcon className="w-4 h-4" />
-                                                    </Link>
-                                                    <button
-                                                        onClick={() => handleDelete(product.id, product.name)}
-                                                        className="p-2 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900 rounded-lg transition-all"
-                                                        title="Delete"
-                                                    >
-                                                        <TrashIcon className="w-4 h-4" />
-                                                    </button>
-                                                </div>
+                                                {isAdmin ? (
+                                                    <div className="flex justify-center gap-2">
+                                                        <Link
+                                                            href={`/products/${product.id}/edit`}
+                                                            className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900 rounded-lg transition-all"
+                                                            title="Edit"
+                                                        >
+                                                            <PencilIcon className="w-4 h-4" />
+                                                        </Link>
+                                                        <button
+                                                            onClick={() => handleDelete(product.id, product.name)}
+                                                            className="p-2 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900 rounded-lg transition-all"
+                                                            title="Delete"
+                                                        >
+                                                            <TrashIcon className="w-4 h-4" />
+                                                        </button>
+                                                    </div>
+                                                ) : (
+                                                    <span className="text-xs text-gray-500">View only</span>
+                                                )}
                                             </td>
                                         </tr>
                                     ))
@@ -153,9 +160,13 @@ export default function ProductIndex({ products, search, auth }) {
                                                 <p className="font-medium mb-1 text-sm md:text-base">No products found</p>
                                                 <p className="text-xs md:text-sm">
                                                     Try adjusting your search or{' '}
-                                                    <Link href="/products/create" className="text-blue-600 dark:text-blue-400 hover:underline">
-                                                        create a new one
-                                                    </Link>
+                                                    {isAdmin ? (
+                                                        <Link href="/products/create" className="text-blue-600 dark:text-blue-400 hover:underline">
+                                                            create a new one
+                                                        </Link>
+                                                    ) : (
+                                                        'check another keyword'
+                                                    )}
                                                 </p>
                                             </div>
                                         </td>

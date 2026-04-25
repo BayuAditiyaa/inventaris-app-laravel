@@ -19,6 +19,12 @@ export default function ShowSale({ sale, auth }) {
                         <p className="text-gray-600 mt-1">{sale.invoice_no}</p>
                     </div>
                     <div className="flex gap-2">
+                        <a
+                            href={`/sales/${sale.id}/pdf`}
+                            className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2 print:hidden"
+                        >
+                            PDF
+                        </a>
                         <button
                             onClick={handlePrint}
                             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 print:hidden"
@@ -40,9 +46,9 @@ export default function ShowSale({ sale, auth }) {
                 <div className="bg-white rounded-lg shadow p-8 print:shadow-none print:p-0">
                     {/* Company Header */}
                     <div className="border-b-2 border-gray-300 pb-6 mb-6">
-                        <h2 className="text-2xl font-bold text-gray-900">Your Company Name</h2>
-                        <p className="text-gray-600">Your Address</p>
-                        <p className="text-gray-600">Phone: (XXX) XXX-XXXX</p>
+                        <h2 className="text-2xl font-bold text-gray-900">Breeze Inventory</h2>
+                        <p className="text-gray-600">Retail and warehouse operations demo application</p>
+                        <p className="text-gray-600">Phone: +62 812-0000-0000</p>
                     </div>
 
                     {/* Invoice Details */}

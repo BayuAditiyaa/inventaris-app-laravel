@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\StockMovement;
 use App\Http\Requests\StoreStockMovementRequest;
+use App\Services\ActivityLogService;
 use App\Services\InventoryServices;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Gate;
@@ -14,7 +15,7 @@ class StockMovementController extends Controller
     protected InventoryServices $inventoryService;
 
     // BRING THIS CONSTRUCTOR BACK!
-    public function __construct(InventoryServices $inventoryService)
+    public function __construct(InventoryServices $inventoryService, protected ActivityLogService $activityLogService)
     {
         $this->inventoryService = $inventoryService;
     }
@@ -78,14 +79,21 @@ class StockMovementController extends Controller
             $note = $request->note;
 
             if ($type === 'in') {
-                $this->inventoryService->increaseStock($product, $qty, $note);
+                $movement = $this->inventoryService->increaseStock($product, $qty, $note);
             } elseif ($type === 'out') {
-                $this->inventoryService->decreaseStock($product, $qty, $note);
+                $movement = $this->inventoryService->decreaseStock($product, $qty, $note);
             } elseif ($type === 'adjust') {
                 // For adjust, qty is the delta (can be positive or negative)
                 $delta = $request->adjustment_type === 'increase' ? $qty : -$qty;
-                $this->inventoryService->adjustStock($product, $delta, $note);
+                $movement = $this->inventoryService->adjustStock($product, $delta, $note);
             }
+
+            $this->activityLogService->log(
+                'stock_movement.created',
+                "Recorded {$type} stock movement for {$product->name}",
+                $movement ?? null,
+                ['product_name' => $product->name, 'qty' => $qty, 'type' => $type]
+            );
 
             return redirect()->route('stock-movements.index')
                 ->with('success', 'Stock movement recorded successfully.');
