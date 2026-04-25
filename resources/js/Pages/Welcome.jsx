@@ -31,10 +31,10 @@ export default function Welcome({ auth }) {
                                         Masuk
                                     </Link>
                                     <Link
-                                        href="/register"
+                                        href="/login"
                                         className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all font-medium"
                                     >
-                                        Mulai Sekarang
+                                        Lihat Demo
                                     </Link>
                                 </>
                             )}
@@ -56,10 +56,10 @@ export default function Welcome({ auth }) {
                                 {!auth.user && (
                                     <>
                                         <Link
-                                            href="/register"
+                                            href="/login"
                                             className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all font-medium shadow-lg hover:shadow-xl"
                                         >
-                                            Coba Demo Sekarang
+                                            Masuk Demo
                                         </Link>
                                         <Link
                                             href="/login"
@@ -180,10 +180,10 @@ export default function Welcome({ auth }) {
                         <p className="text-blue-100 mb-8 max-w-2xl mx-auto">Masuk untuk melihat bagaimana sistem ini dirancang dengan standar pengembangan web yang modern, efisien, dan siap memenuhi kebutuhan operasional bisnis tingkat tinggi.</p>
                         {!auth.user && (
                             <Link
-                                href="/register"
+                                href="/login"
                                 className="inline-block px-8 py-3 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition-all font-bold shadow-lg hover:shadow-xl"
                             >
-                                Mulai Jelajahi Aplikasi
+                                Masuk ke Demo
                             </Link>
                         )}
                     </div>

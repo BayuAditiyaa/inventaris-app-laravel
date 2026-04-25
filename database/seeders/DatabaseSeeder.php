@@ -71,13 +71,13 @@ class DatabaseSeeder extends Seeder
     {
         $admin = User::factory()->admin()->create([
             'name' => 'Super Admin',
-            'email' => 'admin@gmail.com',
+            'email' => 'admin@breezeinventory.test',
             'password' => Hash::make('password123'),
         ]);
 
         $staff = User::factory()->staff()->create([
             'name' => 'Staff Member',
-            'email' => 'staff@gmail.com',
+            'email' => 'staff@breezeinventory.test',
             'password' => Hash::make('password123'),
         ]);
 

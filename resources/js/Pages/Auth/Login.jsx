@@ -83,7 +83,7 @@ export default function Login({ status, canResetPassword }) {
                                     <ShieldCheckIcon className="h-6 w-6" />
                                 </div>
                                 <h2 className="text-2xl font-bold">Sign in</h2>
-                                <p className="mt-2 text-sm text-slate-600">Use one of the seeded demo accounts to explore admin and staff workflows.</p>
+                                <p className="mt-2 text-sm text-slate-600">Use the seeded demo accounts from the project README to explore admin and staff workflows.</p>
                             </div>
 
                             {status && (
@@ -152,29 +152,8 @@ export default function Login({ status, canResetPassword }) {
                                 </button>
                             </form>
 
-                            <div className="mt-6 grid gap-3 rounded-lg bg-slate-50 p-4 text-sm">
-                                <button
-                                    type="button"
-                                    onClick={() => setData({ email: 'admin@gmail.com', password: 'password123', remember: data.remember })}
-                                    className="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2 text-left transition hover:border-blue-300 hover:bg-blue-50"
-                                >
-                                    <span>
-                                        <span className="block font-semibold text-slate-800">Admin</span>
-                                        <span className="text-slate-500">Reports, products, suppliers, purchase orders</span>
-                                    </span>
-                                    <span className="text-xs font-semibold text-blue-700">Use</span>
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={() => setData({ email: 'staff@gmail.com', password: 'password123', remember: data.remember })}
-                                    className="flex items-center justify-between rounded-lg border border-slate-200 bg-white px-3 py-2 text-left transition hover:border-blue-300 hover:bg-blue-50"
-                                >
-                                    <span>
-                                        <span className="block font-semibold text-slate-800">Staff</span>
-                                        <span className="text-slate-500">Sales, customers, operational access</span>
-                                    </span>
-                                    <span className="text-xs font-semibold text-blue-700">Use</span>
-                                </button>
+                            <div className="mt-6 rounded-lg bg-slate-50 p-4 text-sm text-slate-600">
+                                Demo access is available for portfolio review, but credentials are not exposed on the public login screen.
                             </div>
                         </div>
                     </div>

@@ -76,11 +76,13 @@ This means the dashboard, charts, procurement cards, activity log, and reports a
 ## Demo Accounts
 
 - Admin
-  - Email: `admin@gmail.com`
+  - Email: `admin@breezeinventory.test`
   - Password: `password123`
 - Staff
-  - Email: `staff@gmail.com`
+  - Email: `staff@breezeinventory.test`
   - Password: `password123`
+
+Public registration is disabled for the portfolio demo. Use the seeded accounts above after running `php artisan migrate --seed`.
 
 ## Suggested Demo Flow
 
