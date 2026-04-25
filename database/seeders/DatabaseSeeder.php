@@ -69,16 +69,20 @@ class DatabaseSeeder extends Seeder
 
     private function seedUsers(): array
     {
-        $admin = User::factory()->admin()->create([
+        $admin = User::create([
             'name' => 'Super Admin',
             'email' => 'admin@breezeinventory.test',
             'password' => Hash::make('password123'),
+            'role' => 'admin',
+            'email_verified_at' => now(),
         ]);
 
-        $staff = User::factory()->staff()->create([
+        $staff = User::create([
             'name' => 'Staff Member',
             'email' => 'staff@breezeinventory.test',
             'password' => Hash::make('password123'),
+            'role' => 'staff',
+            'email_verified_at' => now(),
         ]);
 
         return [$admin, $staff];
